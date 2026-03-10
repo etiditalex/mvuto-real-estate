@@ -130,11 +130,11 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:info@mvuorealestate.co.ke"
+                  href="mailto:info@mvuto.co.ke"
                   className="flex items-start gap-3 text-sm text-white/90 transition-colors hover:text-accent"
                 >
                   <Mail className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                  <span>info@mvuorealestate.co.ke</span>
+                  <span>info@mvuto.co.ke</span>
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-white/90">

@@ -45,7 +45,7 @@ export default function ContactPage() {
                 </div>
               </a>
               <a
-                href="mailto:info@mvuorealestate.co.ke"
+                href="mailto:info@mvuto.co.ke"
                 className="flex items-center gap-4 transition-colors hover:text-accent"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
@@ -53,7 +53,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Email</p>
-                  <p className="font-medium">info@mvuorealestate.co.ke</p>
+                  <p className="font-medium">info@mvuto.co.ke</p>
                 </div>
               </a>
               <div className="flex items-center gap-4">
