@@ -83,13 +83,14 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-28">
-        {/* Background image */}
+        {/* Blurred background image */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110 blur-lg"
           style={{ backgroundImage: `url("${HERO_IMAGE_URL}")` }}
+          aria-hidden
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-primary/75" />
+        {/* Dark overlay for text readability (blended, desaturated look) */}
+        <div className="absolute inset-0 bg-primary/80" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -112,7 +113,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/for-sale"
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-medium text-primary transition-colors hover:bg-accent/90"
+              className="inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-medium text-primary transition-colors hover:bg-accent-blend"
             >
               Discover More
               <ArrowRight className="h-5 w-5" />
@@ -265,7 +266,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-medium text-primary transition-colors hover:bg-accent/90"
+              className="inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-medium text-primary transition-colors hover:bg-accent-blend"
             >
               Contact Us
               <ArrowRight className="h-5 w-5" />

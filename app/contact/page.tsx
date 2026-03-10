@@ -36,7 +36,7 @@ export default function ContactPage() {
                 href="tel:+254725111444"
                 className="flex items-center gap-4 transition-colors hover:text-accent"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blend">
                   <Phone className="h-6 w-6 text-accent" />
                 </div>
                 <div>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                 href="mailto:info@mvuto.co.ke"
                 className="flex items-center gap-4 transition-colors hover:text-accent"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blend">
                   <Mail className="h-6 w-6 text-accent" />
                 </div>
                 <div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
                 </div>
               </a>
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blend">
                   <MapPin className="h-6 w-6 text-accent" />
                 </div>
                 <div>
@@ -91,7 +91,7 @@ export default function ContactPage() {
                     id="name"
                     name="name"
                     required
-                    className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent-blend"
                     placeholder="Your name"
                   />
                 </div>
@@ -107,7 +107,7 @@ export default function ContactPage() {
                     id="email"
                     name="email"
                     required
-                    className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                    className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent-blend"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -123,7 +123,7 @@ export default function ContactPage() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                  className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent-blend"
                   placeholder="+254 XXX XXX XXX"
                 />
               </div>
@@ -139,7 +139,7 @@ export default function ContactPage() {
                   name="message"
                   rows={5}
                   required
-                  className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                  className="w-full rounded-lg border border-primary/20 px-4 py-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent-blend"
                   placeholder="Tell us about your property needs..."
                 />
               </div>

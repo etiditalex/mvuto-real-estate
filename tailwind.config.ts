@@ -10,7 +10,10 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#001447",
-        accent: "#f2e3bc",
+        accent: {
+          DEFAULT: "#e7ab28",
+          blend: "#f0dda8",
+        },
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)"],

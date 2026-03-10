@@ -13,7 +13,7 @@ export default function DevelopmentsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent-blend">
             <Building2 className="h-8 w-8 text-primary" />
           </div>
           <h1 className="mb-4 text-3xl font-bold text-primary lg:text-4xl">

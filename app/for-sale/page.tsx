@@ -28,7 +28,7 @@ export default function ForSalePage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-14 text-center"
         >
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent-blend">
             <Home className="h-8 w-8 text-primary" />
           </div>
           <h1 className="mb-4 text-3xl font-bold text-primary lg:text-4xl">
@@ -93,13 +93,13 @@ export default function ForSalePage() {
                     Balance in {property.installments}
                   </p>
                 </div>
-                <Link
+          <Link
                   href={`/for-sale/${property.id}`}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 font-medium text-accent transition-colors hover:bg-primary/90"
-                >
+          >
                   View details
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+          </Link>
               </div>
             </motion.article>
           ))}

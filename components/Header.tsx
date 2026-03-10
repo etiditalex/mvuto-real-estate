@@ -99,7 +99,7 @@ export default function Header() {
                           <Link
                             key={item.href}
                             href={item.href}
-                            className="block px-4 py-2 text-sm text-white/90 transition-colors hover:bg-accent/20 hover:text-accent"
+                            className="block px-4 py-2 text-sm text-white/90 transition-colors hover:bg-accent-blend hover:text-accent"
                           >
                             {item.label}
                           </Link>
@@ -141,7 +141,7 @@ export default function Header() {
           </a>
           <Link
             href="/contact"
-            className="rounded-md bg-accent px-6 py-2.5 font-medium text-primary transition-colors hover:bg-accent/90"
+            className="rounded-md bg-accent px-6 py-2.5 font-medium text-primary transition-colors hover:bg-accent-blend"
           >
             Contact Us
           </Link>
@@ -174,7 +174,7 @@ export default function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`block rounded-lg px-4 py-3 ${
                       isActive(link.href)
-                        ? "bg-accent/20 text-accent"
+                        ? "bg-accent-blend text-accent"
                         : "text-white/90 hover:bg-white/5"
                     }`}
                   >

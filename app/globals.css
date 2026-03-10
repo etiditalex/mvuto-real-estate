@@ -4,7 +4,8 @@
 
 :root {
   --primary: #001447;
-  --accent: #f2e3bc;
+  --accent: #e7ab28;
+  --accent-blend: #f0dda8;
 }
 
 body {

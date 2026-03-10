@@ -82,7 +82,7 @@ export default function ServicesPage() {
                 href={service.href}
                 className="group flex items-start gap-4 rounded-xl border border-primary/10 bg-white p-6 transition-shadow hover:shadow-lg"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent/20 text-primary group-hover:bg-accent">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent-blend text-primary group-hover:bg-accent">
                   <service.icon className="h-6 w-6" />
                 </div>
                 <div>
