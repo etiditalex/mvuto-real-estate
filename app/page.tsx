@@ -102,12 +102,11 @@ export default function HomePage() {
               Coastal&apos;s Gate to{" "}
               <span className="text-accent">Real Estate</span>
             </h1>
-            <p className="mb-10 max-w-2xl text-lg leading-relaxed text-white lg:text-xl">
-              <span className="block mb-3">
-                We Connect Global Investors to Coastal&apos;s Property Market
-                through Trust, Innovation, and Personalized Service & Partnership,
-              </span>
+            <p className="mb-10 w-full max-w-7xl text-center text-lg leading-relaxed text-white lg:text-xl">
               <span className="block">
+                We Connect Global Investors to Coastal&apos;s Property Market through Trust, Innovation, and Personalized Service & Partnership,
+              </span>
+              <span className="mt-2 block">
                 Delivering Luxury Homes & Long-term Value Across the Continent.
               </span>
             </p>

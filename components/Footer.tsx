@@ -50,7 +50,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Logo & Social */}
           <div className="flex flex-col">
-            <div className="mb-6 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded bg-accent p-2">
+            <div className="mb-6 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded">
               <Image
                 src={LOGO_URL}
                 alt="MVUTO Real Estate Ltd"

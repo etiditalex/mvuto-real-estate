@@ -50,7 +50,7 @@ export default function Header() {
       <nav className="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center">
-          <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded bg-accent p-1.5 lg:h-16 lg:w-16">
+          <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded lg:h-16 lg:w-16">
             <Image
               src={LOGO_URL}
               alt="Mvuto Real Estate Ltd"
