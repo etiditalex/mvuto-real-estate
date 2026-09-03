@@ -12,6 +12,10 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Newspaper,
+  Megaphone,
+  BarChart3,
+  Quote,
 } from "lucide-react";
 import { cn } from "@/lib/admin/utils";
 import { adminPath } from "@/lib/admin/path";
@@ -23,6 +27,10 @@ import { LOGO_URL } from "@/lib/site";
 const navItems = [
   { segment: "", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { segment: "properties", label: "Listings", icon: MapPin },
+  { segment: "blogs", label: "Blogs", icon: Newspaper },
+  { segment: "news", label: "News", icon: Megaphone },
+  { segment: "market-research", label: "Market Research", icon: BarChart3 },
+  { segment: "testimonials", label: "Testimonials", icon: Quote },
   { segment: "inquiries", label: "Inquiries", icon: MessageSquare, badge: "inquiries" as const },
   { segment: "leads", label: "Leads", icon: Users, badge: "leads" as const },
 ];

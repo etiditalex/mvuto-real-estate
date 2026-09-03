@@ -22,6 +22,10 @@ export function formatAdminDate(iso: string): string {
   });
 }
 
+export function formatIsoDate(iso: string): string {
+  return formatAdminDate(iso);
+}
+
 export function formatKes(price: string | null | undefined): string {
   const trimmed = (price || "").trim();
   if (!trimmed) return "Price on request";

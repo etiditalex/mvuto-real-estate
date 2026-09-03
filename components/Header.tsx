@@ -23,6 +23,16 @@ const navLinks = [
   },
   { href: "/about", label: "About Us" },
   {
+    href: "/insights",
+    label: "Insights",
+    dropdown: [
+      { href: "/blog", label: "Blog" },
+      { href: "/news", label: "News Updates" },
+      { href: "/market-research", label: "Market Research" },
+    ],
+  },
+  { href: "/testimonials", label: "Testimonials" },
+  {
     href: "/services",
     label: "Services",
     dropdown: [
@@ -40,9 +50,12 @@ export default function Header() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isActive = (href: string) => {
+  const isActive = (href: string, dropdown?: { href: string }[]) => {
     if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
+    if (dropdown?.some((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))) {
+      return true;
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
@@ -75,7 +88,7 @@ export default function Header() {
                 <Link
                   href={link.href}
                   className={`flex items-center gap-1 transition-colors hover:text-accent ${
-                    isActive(link.href) ? "text-accent" : "text-white/90"
+                    isActive(link.href, link.dropdown) ? "text-accent" : "text-white/90"
                   }`}
                 >
                   {link.label}
@@ -114,11 +127,13 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={`relative transition-colors hover:text-accent ${
-                  isActive(link.href) ? "text-accent" : "text-white/90"
-                }`}
+                    isActive(link.href, "dropdown" in link ? link.dropdown : undefined)
+                      ? "text-accent"
+                      : "text-white/90"
+                  }`}
               >
                 {link.label}
-                {isActive(link.href) && (
+                {isActive(link.href, "dropdown" in link ? link.dropdown : undefined) && (
                   <motion.span
                     layoutId="navbar-underline"
                     className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent"
@@ -173,7 +188,7 @@ export default function Header() {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`block rounded-lg px-4 py-3 ${
-                      isActive(link.href)
+                      isActive(link.href, "dropdown" in link ? link.dropdown : undefined)
                         ? "bg-accent-blend text-accent"
                         : "text-white/90 hover:bg-white/5"
                     }`}

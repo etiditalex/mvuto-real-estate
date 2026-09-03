@@ -1,4 +1,5 @@
 export type PropertyStatus = "available" | "ongoing" | "sold";
+export type ContentStatus = "draft" | "published";
 export type InquiryStatus = "new" | "read" | "responded" | "archived";
 export type LeadStatus = "new" | "contacted" | "qualified" | "converted" | "lost";
 
@@ -70,6 +71,76 @@ export interface PropertyLead {
   source: string;
   status: LeadStatus;
   notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  author: string;
+  published_at: string;
+  image: string;
+  category: string;
+  slug: string;
+  content_html: string | null;
+  hero_title: string | null;
+  hero_image_alt: string | null;
+  status: ContentStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NewsItem {
+  id: number;
+  title: string;
+  excerpt: string;
+  published_at: string;
+  category: string;
+  image: string;
+  featured: boolean;
+  details: string[];
+  status: ContentStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MarketResearchReport {
+  id: number;
+  title: string;
+  description: string;
+  report_date: string;
+  report_type: string;
+  file_url: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MarketResearchInsight {
+  id: number;
+  icon: string;
+  title: string;
+  value: string;
+  description: string;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientTestimonial {
+  id: number;
+  name: string;
+  location: string;
+  property: string;
+  rating: number;
+  text: string;
+  image: string;
+  sort_order: number;
+  published: boolean;
   created_at: string;
   updated_at: string;
 }

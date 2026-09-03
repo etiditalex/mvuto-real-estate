@@ -12,6 +12,7 @@ import {
   FileCheck,
 } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
+import HomeTestimonials from "@/components/HomeTestimonials";
 import type { CatalogProperty } from "@/lib/properties/catalog";
 
 const HERO_IMAGE_URL =
@@ -187,6 +188,8 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
           </motion.div>
         </div>
       </section>
+
+      <HomeTestimonials />
 
       <section className="bg-primary py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 text-center lg:px-8">

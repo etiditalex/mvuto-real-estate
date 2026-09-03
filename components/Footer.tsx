@@ -30,8 +30,10 @@ const exploreLinks = [
   { label: "MVUTO Developments", href: "/developments" },
   { label: "Investment in Kenya", href: "/services/investment" },
   { label: "For Sale", href: "/for-sale" },
+  { label: "Blog", href: "/blog" },
   { label: "News", href: "/news" },
-  { label: "MVUTO Global", href: "#" },
+  { label: "Market Research", href: "/market-research" },
+  { label: "Testimonials", href: "/testimonials" },
 ];
 
 const socialLinks = [
