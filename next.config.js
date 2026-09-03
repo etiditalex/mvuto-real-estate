@@ -1,23 +1,43 @@
 const path = require("path");
 
+const remotePatterns = [
+  {
+    protocol: "https",
+    hostname: "res.cloudinary.com",
+    pathname: "/**",
+  },
+  {
+    protocol: "https",
+    hostname: "picsum.photos",
+    pathname: "/**",
+  },
+  {
+    protocol: "https",
+    hostname: "*.supabase.co",
+    pathname: "/storage/v1/object/public/**",
+  },
+];
+
+if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  try {
+    const hostname = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname;
+    if (!remotePatterns.some((p) => p.hostname === hostname)) {
+      remotePatterns.push({
+        protocol: "https",
+        hostname,
+        pathname: "/storage/v1/object/public/**",
+      });
+    }
+  } catch {
+    // ignore invalid URL
+  }
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-        pathname: "/**",
-      },
-    ],
+    remotePatterns,
   },
 };
 
