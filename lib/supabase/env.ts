@@ -18,6 +18,8 @@ export function getSupabaseAnonKey(): string {
   return readEnv([
     "SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_KEY",
   ]);
 }

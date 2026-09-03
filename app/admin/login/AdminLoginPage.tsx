@@ -7,7 +7,13 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { adminPath } from "@/lib/admin/path";
 import { LOGO_URL } from "@/lib/site";
 
-export default function AdminLoginPage() {
+export default function AdminLoginPage({
+  supabaseUrl = "",
+  supabaseAnonKey = "",
+}: {
+  supabaseUrl?: string;
+  supabaseAnonKey?: string;
+}) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || adminPath();
 
@@ -24,11 +30,15 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      if (!isSupabaseConfigured()) {
-        setError("Supabase is not configured. Add keys in .env.local and restart the app.");
+      const url = supabaseUrl || undefined;
+      const anonKey = supabaseAnonKey || undefined;
+      if (!isSupabaseConfigured() && !(url && anonKey)) {
+        setError(
+          "Supabase keys are missing on the server. In Vercel → Settings → Environment Variables, add SUPABASE_URL and SUPABASE_ANON_KEY (and the NEXT_PUBLIC_ copies) for Production, then Redeploy."
+        );
         return;
       }
-      const supabase = createClient();
+      const supabase = createClient({ url, anonKey });
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -52,7 +62,10 @@ export default function AdminLoginPage() {
       setError("Enter your email address above, then click forgot password.");
       return;
     }
-    const supabase = createClient();
+    const supabase = createClient({
+      url: supabaseUrl || undefined,
+      anonKey: supabaseAnonKey || undefined,
+    });
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(adminPath())}`,
     });
