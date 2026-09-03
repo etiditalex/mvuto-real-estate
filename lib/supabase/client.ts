@@ -3,6 +3,7 @@
  * (Vercel env is available at request time) over build-time NEXT_PUBLIC_* values.
  */
 import { createBrowserClient } from "@supabase/ssr";
+import { isSecretSupabaseKey } from "@/lib/supabase/env";
 
 type PublicSupabaseConfig = {
   url: string;
@@ -15,6 +16,12 @@ declare global {
   }
 }
 
+function sanitizeBrowserKey(key: string): string {
+  const value = key.trim();
+  if (!value || isSecretSupabaseKey(value)) return "";
+  return value;
+}
+
 function readBrowserConfig(): PublicSupabaseConfig {
   const injected =
     typeof window !== "undefined" ? window.__MVUTO_SUPABASE__ : undefined;
@@ -24,11 +31,9 @@ function readBrowserConfig(): PublicSupabaseConfig {
       process.env.NEXT_PUBLIC_SUPABASE_URL ||
       ""
     ).trim(),
-    anonKey: (
-      injected?.anonKey ||
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      ""
-    ).trim(),
+    anonKey: sanitizeBrowserKey(
+      injected?.anonKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+    ),
   };
 }
 
@@ -44,6 +49,6 @@ export function isSupabaseConfigured(): boolean {
 export function createClient(config?: Partial<PublicSupabaseConfig>) {
   const fallback = readBrowserConfig();
   const url = (config?.url || fallback.url).trim();
-  const anonKey = (config?.anonKey || fallback.anonKey).trim();
+  const anonKey = sanitizeBrowserKey(config?.anonKey || fallback.anonKey);
   return createBrowserClient(url, anonKey);
 }

@@ -1,4 +1,4 @@
-import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/supabase/env";
+import { getSupabaseAnonKey, getSupabaseUrl, isSecretSupabaseKey } from "@/lib/supabase/env";
 
 export default function SupabaseBrowserConfig({
   url,
@@ -9,7 +9,7 @@ export default function SupabaseBrowserConfig({
 }) {
   const resolvedUrl = (url ?? getSupabaseUrl()).trim();
   const resolvedKey = (anonKey ?? getSupabaseAnonKey()).trim();
-  if (!resolvedUrl || !resolvedKey) return null;
+  if (!resolvedUrl || !resolvedKey || isSecretSupabaseKey(resolvedKey)) return null;
 
   return (
     <script

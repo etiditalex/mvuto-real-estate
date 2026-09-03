@@ -10,16 +10,50 @@ function readEnv(names: readonly string[]): string {
   return "";
 }
 
+function decodeJwtRole(token: string): string {
+  try {
+    const part = token.split(".")[1];
+    if (!part) return "";
+    const padded = part.replace(/-/g, "+").replace(/_/g, "/");
+    const json =
+      typeof Buffer !== "undefined"
+        ? Buffer.from(padded, "base64").toString("utf8")
+        : atob(padded);
+    const payload = JSON.parse(json) as { role?: string };
+    return payload.role || "";
+  } catch {
+    return "";
+  }
+}
+
+/** True for service-role / sb_secret keys that must never run in the browser. */
+export function isSecretSupabaseKey(key: string): boolean {
+  const value = key.trim();
+  if (!value) return false;
+  if (value.startsWith("sb_secret_")) return true;
+  if (value.startsWith("sb_publishable_")) return false;
+  if (value.startsWith("eyJ") && decodeJwtRole(value) === "service_role") return true;
+  return false;
+}
+
+function readPublicKey(names: readonly string[]): string {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value && !isSecretSupabaseKey(value)) return value;
+  }
+  return "";
+}
+
 export function getSupabaseUrl(): string {
   return readEnv(["SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_URL"]);
 }
 
 export function getSupabaseAnonKey(): string {
-  return readEnv([
-    "SUPABASE_ANON_KEY",
+  return readPublicKey([
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_PUBLISHABLE_KEY",
+    "SUPABASE_ANON_KEY",
     "SUPABASE_KEY",
   ]);
 }

@@ -34,7 +34,7 @@ export default function AdminLoginPage({
       const anonKey = supabaseAnonKey || undefined;
       if (!isSupabaseConfigured() && !(url && anonKey)) {
         setError(
-          "Supabase keys are missing on the server. In Vercel → Settings → Environment Variables, add SUPABASE_URL and SUPABASE_ANON_KEY (and the NEXT_PUBLIC_ copies) for Production, then Redeploy."
+          "A publishable/anon Supabase key is missing. In Vercel, set NEXT_PUBLIC_SUPABASE_ANON_KEY to the sb_publishable_… key (not the sb_secret_… key), then Redeploy."
         );
         return;
       }
