@@ -12,6 +12,8 @@ export function mapBlogRow(row: {
   category: string;
   slug: string;
   content_html?: string | null;
+  hero_title?: string | null;
+  hero_image_alt?: string | null;
 }): BlogListItem {
   return {
     id: row.id,
@@ -23,6 +25,8 @@ export function mapBlogRow(row: {
     category: row.category,
     slug: row.slug,
     content_html: row.content_html || undefined,
+    hero_title: row.hero_title || undefined,
+    hero_image_alt: row.hero_image_alt || undefined,
   };
 }
 

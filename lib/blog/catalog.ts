@@ -8,6 +8,8 @@ export type BlogListItem = {
   category: string;
   slug: string;
   content_html?: string;
+  hero_title?: string;
+  hero_image_alt?: string;
 };
 
 export const STATIC_BLOG_POSTS: BlogListItem[] = [

@@ -1,85 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import PageHero from "@/components/PageHero";
-import { STATIC_BLOG_POSTS, type BlogListItem } from "@/lib/blog/catalog";
-import { formatIsoDate } from "@/lib/admin/utils";
-import { propertyImageProps } from "@/lib/images";
+import { Suspense, useMemo } from "react";
+import BlogsHeroCarousel from "@/components/blog/BlogsHeroCarousel";
+import BlogsArchiveMain from "@/components/blog/BlogsArchiveMain";
+import BlogsArchiveSidebar from "@/components/blog/BlogsArchiveSidebar";
+import { useBlogPosts } from "@/lib/blog/useBlogPosts";
+
+function BlogsArchiveMainFallback() {
+  return (
+    <div className="space-y-6">
+      <div className="mb-6 h-8 w-48 animate-pulse rounded bg-primary/10" />
+      <div className="mb-10 h-4 max-w-xl animate-pulse rounded bg-primary/10" />
+      {[1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="flex animate-pulse flex-col gap-5 rounded-lg border border-primary/10 bg-white p-5 sm:flex-row"
+        >
+          <div className="h-44 w-full shrink-0 rounded bg-primary/10 sm:w-52" />
+          <div className="flex-1 space-y-3 pt-1">
+            <div className="h-4 w-32 rounded bg-primary/10" />
+            <div className="h-6 w-full max-w-md rounded bg-primary/10" />
+            <div className="h-4 w-full rounded bg-primary/10" />
+            <div className="h-4 w-full max-w-lg rounded bg-primary/10" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function BlogIndexPage() {
-  const [posts, setPosts] = useState<BlogListItem[]>(STATIC_BLOG_POSTS);
-
-  useEffect(() => {
-    fetch("/api/content/blogs", { cache: "no-store" })
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.posts?.length) return;
-        const mapped: BlogListItem[] = data.posts.map(
-          (p: {
-            id: number;
-            title: string;
-            excerpt: string;
-            author: string;
-            published_at: string;
-            image: string;
-            category: string;
-            slug: string;
-          }) => ({
-            id: p.id,
-            title: p.title,
-            excerpt: p.excerpt,
-            author: p.author,
-            date: p.published_at,
-            image: p.image,
-            category: p.category,
-            slug: p.slug,
-          })
-        );
-        setPosts(mapped);
-      })
-      .catch(() => {});
-  }, []);
+  const { posts: carouselPosts } = useBlogPosts();
+  const sortedPosts = useMemo(
+    () => [...carouselPosts].sort((a, b) => b.date.localeCompare(a.date)),
+    [carouselPosts]
+  );
 
   return (
-    <div>
-      <PageHero title="MVUTO Blog" />
-      <section className="bg-[#f5f2ed] py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post, index) => (
-              <motion.article
-                key={post.slug}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.06 }}
-                className="overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm"
-              >
-                <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="relative h-48">
-                    <Image
-                      {...propertyImageProps(post.image)}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                      {post.category}
-                    </p>
-                    <h2 className="mt-2 text-xl font-bold text-primary">{post.title}</h2>
-                    <p className="mt-2 line-clamp-3 text-sm text-primary/70">{post.excerpt}</p>
-                    <p className="mt-4 text-xs text-primary/50">
-                      {formatIsoDate(post.date)} · {post.author}
-                    </p>
-                  </div>
-                </Link>
-              </motion.article>
-            ))}
+    <div className="pb-20">
+      <h1 className="sr-only">Blogs — expert property insights from MVUTO Real Estate</h1>
+      <BlogsHeroCarousel posts={sortedPosts} />
+
+      <section className="bg-[#f5f2ed] py-10 md:py-14">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+            <Suspense fallback={<BlogsArchiveMainFallback />}>
+              <BlogsArchiveMain />
+            </Suspense>
+            <BlogsArchiveSidebar />
           </div>
         </div>
       </section>

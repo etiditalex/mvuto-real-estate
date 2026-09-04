@@ -116,8 +116,8 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
         </div>
       </section>
 
-      <section className="bg-[#f5f2ed] pb-6 pt-16 lg:pb-8 lg:pt-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+      <section className="w-full bg-[#f5f2ed] pb-6 pt-16 lg:pb-8 lg:pt-24">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -134,22 +134,20 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
         </div>
       </section>
 
-      <section className="bg-white pb-16 pt-6 lg:pb-24 lg:pt-8">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={containerVariants}
-            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {featuredProperties.map((property) => (
-              <motion.div key={property.id} variants={itemVariants}>
-                <PropertyCard property={property} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+      <section className="w-full bg-white pb-16 pt-6 lg:pb-24 lg:pt-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={containerVariants}
+          className="grid w-full gap-4 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:gap-6 lg:px-8"
+        >
+          {featuredProperties.map((property) => (
+            <motion.div key={property.id} variants={itemVariants} className="min-w-0">
+              <PropertyCard property={property} />
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       <section className="bg-primary py-16 lg:py-24">

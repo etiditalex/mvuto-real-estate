@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Property & Land Investment Blog | Kenya Coast",
   description:
-    "MVUTO insights on Kenya Coast land, titles, payment plans, and buying with confidence.",
+    "Expert articles on land for sale on Kenya's Coast — Kilifi, Diani, Mariakani — titles, payment plans, and buying with MVUTO.",
 };
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
