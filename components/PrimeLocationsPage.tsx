@@ -18,7 +18,6 @@ import type { CatalogProperty } from "@/lib/properties/catalog";
 import { getPaymentField, propertyPublicPath } from "@/lib/properties/catalog";
 import { formatKes } from "@/lib/admin/utils";
 import { propertyImageProps } from "@/lib/images";
-import { LOGO_URL } from "@/lib/site";
 
 const HERO_IMAGE =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771828649/hero_photo_fpus31.jpg";
@@ -81,66 +80,30 @@ export default function PrimeLocationsPage({ projects }: Props) {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/25" />
 
-        <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 py-20 lg:min-h-[640px] lg:px-8 lg:py-28">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55 }}
-              className="max-w-xl"
+        <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 py-20 pb-28 lg:min-h-[640px] lg:px-8 lg:py-28 lg:pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            className="max-w-xl"
+          >
+            <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+              Prime Plots.{" "}
+              <span className="text-accent">Greater Possibilities.</span>
+            </h1>
+            <p className="mt-5 text-lg leading-relaxed text-white/90 md:text-xl">
+              Own a piece of tomorrow in Kenya&apos;s most promising Coast
+              locations. Affordable. Verified. Strategically placed for lasting
+              value.
+            </p>
+            <Link
+              href="#featured-projects"
+              className="mt-8 inline-flex items-center gap-2 rounded-md bg-accent px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-primary transition hover:bg-accent-blend"
             >
-              <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
-                Prime Plots.{" "}
-                <span className="text-accent">Greater Possibilities.</span>
-              </h1>
-              <p className="mt-5 text-lg leading-relaxed text-white/90 md:text-xl">
-                Own a piece of tomorrow in Kenya&apos;s most promising Coast
-                locations. Affordable. Verified. Strategically placed for
-                lasting value.
-              </p>
-              <Link
-                href="#featured-projects"
-                className="mt-8 inline-flex items-center gap-2 rounded-md bg-accent px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-primary transition hover:bg-accent-blend"
-              >
-                Explore Our Projects
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.12 }}
-              className="hidden justify-end lg:flex"
-            >
-              <div className="relative w-full max-w-sm">
-                <div
-                  className="absolute left-1/2 top-0 h-16 w-3 -translate-x-1/2 rounded-sm bg-[#6b4a2e] shadow-md"
-                  aria-hidden
-                />
-                <div className="mt-14 overflow-hidden rounded-md border-4 border-[#8b5e34] bg-[#f5f2ed] shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
-                  <div className="flex flex-col items-center gap-3 px-8 py-8 text-center">
-                    <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-white">
-                      <Image
-                        src={LOGO_URL}
-                        alt="MVUTO Real Estate Ltd"
-                        fill
-                        className="object-contain"
-                        sizes="80px"
-                      />
-                    </div>
-                    <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary">
-                      MVUTO Real Estate
-                    </p>
-                    <p className="font-serif text-xl italic leading-snug text-primary/80">
-                      Land Today.
-                      <br />A Brighter Tomorrow.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+              Explore Our Projects
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 z-20 border-t border-white/15 bg-primary/70 backdrop-blur-sm">
@@ -160,90 +123,88 @@ export default function PrimeLocationsPage({ projects }: Props) {
 
       {/* Featured projects */}
       <section id="featured-projects" className="w-full bg-white py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="mb-12 text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              Featured Projects
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-primary md:text-4xl">
-              Our Plots in Prime Locations
-            </h2>
-            <div className="mx-auto mt-4 h-1 w-16 bg-accent" aria-hidden />
-          </div>
+        <div className="mb-12 w-full px-4 text-center sm:px-8 lg:px-12 xl:px-16">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            Featured Projects
+          </p>
+          <h2 className="mt-3 text-3xl font-bold text-primary md:text-4xl">
+            Our Plots in Prime Locations
+          </h2>
+          <div className="mx-auto mt-4 h-1 w-16 bg-accent" aria-hidden />
+        </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((property, index) => {
-              const deposit = getPaymentField(property.paymentPlan, ["Deposit"]);
-              const installments = getPaymentField(property.paymentPlan, [
-                "Installments",
-              ]);
-              const featureLine =
-                property.features?.[0] || `Prime land in ${property.location}`;
+        <div className="grid w-full gap-4 px-4 sm:grid-cols-2 sm:px-6 md:gap-6 lg:grid-cols-3 lg:px-8">
+          {projects.map((property, index) => {
+            const deposit = getPaymentField(property.paymentPlan, ["Deposit"]);
+            const installments = getPaymentField(property.paymentPlan, [
+              "Installments",
+            ]);
+            const featureLine =
+              property.features?.[0] || `Prime land in ${property.location}`;
 
-              return (
-                <motion.article
-                  key={property.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  className="flex flex-col overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm"
-                >
-                  <div className="relative aspect-[16/10] bg-[#f5f2ed]">
-                    {property.image ? (
-                      <Image
-                        {...propertyImageProps(property.image)}
-                        alt={property.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="text-xl font-bold text-primary">{property.title}</h3>
-                    <p className="mt-1 text-sm text-primary/60">{property.location}</p>
+            return (
+              <motion.article
+                key={property.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/10] bg-[#f5f2ed]">
+                  {property.image ? (
+                    <Image
+                      {...propertyImageProps(property.image)}
+                      alt={property.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="text-xl font-bold text-primary">{property.title}</h3>
+                  <p className="mt-1 text-sm text-primary/60">{property.location}</p>
 
-                    <ul className="mt-5 space-y-3 text-sm text-primary/75">
-                      <li className="flex items-start gap-2.5">
-                        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>{featureLine}</span>
-                      </li>
-                      <li className="flex items-start gap-2.5">
-                        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>{property.size} — verified, titled offering</span>
-                      </li>
-                      <li className="flex items-start gap-2.5">
-                        <CircleDollarSign className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>
-                          From {formatKes(property.price)}
-                          {deposit ? ` · Deposit ${formatKes(deposit)}` : ""}
-                          {installments ? ` · ${installments}` : ""}
-                        </span>
-                      </li>
-                    </ul>
+                  <ul className="mt-5 space-y-3 text-sm text-primary/75">
+                    <li className="flex items-start gap-2.5">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>{featureLine}</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <FileText className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>{property.size} — verified, titled offering</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CircleDollarSign className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>
+                        From {formatKes(property.price)}
+                        {deposit ? ` · Deposit ${formatKes(deposit)}` : ""}
+                        {installments ? ` · ${installments}` : ""}
+                      </span>
+                    </li>
+                  </ul>
 
-                    <Link
-                      href={propertyPublicPath(property)}
-                      className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 text-sm font-bold uppercase tracking-wide text-accent transition hover:bg-primary/90"
-                    >
-                      View Project
-                    </Link>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </div>
+                  <Link
+                    href={propertyPublicPath(property)}
+                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 text-sm font-bold uppercase tracking-wide text-accent transition hover:bg-primary/90"
+                  >
+                    View Project
+                  </Link>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/for-sale"
-              className="inline-flex items-center gap-2 rounded-md border-2 border-primary px-7 py-3 text-sm font-bold uppercase tracking-wide text-primary transition hover:bg-accent-blend"
-            >
-              View All Projects
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+        <div className="mt-12 w-full px-4 text-center sm:px-8 lg:px-12">
+          <Link
+            href="/for-sale"
+            className="inline-flex items-center gap-2 rounded-md border-2 border-primary px-7 py-3 text-sm font-bold uppercase tracking-wide text-primary transition hover:bg-accent-blend"
+          >
+            View All Projects
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 
@@ -367,8 +328,8 @@ export default function PrimeLocationsPage({ projects }: Props) {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-primary/75" />
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 lg:flex-row lg:items-center lg:px-8">
-          <div className="max-w-xl">
+        <div className="relative z-10 flex w-full flex-col items-start justify-between gap-8 px-4 sm:px-8 lg:flex-row lg:items-center lg:px-12 xl:px-16">
+          <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Ready to Own a Plot?
             </p>
