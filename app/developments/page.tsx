@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, MapPin, ArrowRight } from "lucide-react";
+import { Building2, MapPin, TrendingUp, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, webPageSchema } from "@/lib/seo";
 
 const hubs = [
   {
@@ -11,6 +13,13 @@ const hubs = [
     description:
       "Verified Coast plots in high-demand corridors — Kilifi, Diani, Mariakani, and more.",
     icon: MapPin,
+  },
+  {
+    href: "/developments/emerging",
+    title: "Emerging Locations",
+    description:
+      "Growth-corridor plots such as Kibao Kiche and Bofa — accessible prices, still titled.",
+    icon: TrendingUp,
   },
   {
     href: "/for-sale",
@@ -24,6 +33,20 @@ const hubs = [
 export default function DevelopmentsPage() {
   return (
     <div className="bg-[#f5f2ed] py-16 lg:py-24">
+      <JsonLd
+        data={[
+          webPageSchema({
+            path: "/developments",
+            title: "Land Developments Kenya Coast",
+            description:
+              "Explore MVUTO land developments on Kenya's Coast — prime and emerging locations with verified titles and flexible payment plans.",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Developments", path: "/developments" },
+          ]),
+        ]}
+      />
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -43,7 +66,7 @@ export default function DevelopmentsPage() {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {hubs.map((hub, index) => (
             <motion.div
               key={hub.href}

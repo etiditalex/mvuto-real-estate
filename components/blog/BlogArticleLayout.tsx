@@ -100,9 +100,9 @@ export default function BlogArticleLayout({
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/30" />
-        <div className="relative z-10 flex min-h-[320px] flex-col justify-end px-4 pb-10 pt-16 md:min-h-[440px] md:px-10 md:pb-14 lg:px-16">
+        <div className="relative z-10 flex min-h-[280px] flex-col justify-end px-4 pb-8 pt-14 sm:min-h-[320px] sm:pb-10 sm:pt-16 md:min-h-[440px] md:px-10 md:pb-14 lg:px-16">
           <div className="mx-auto w-full max-w-6xl">
-            <h1 className="max-w-4xl text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl">
+            <h1 className="max-w-4xl break-words text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl lg:text-5xl">
               {displayTitle}
             </h1>
             <nav
@@ -135,7 +135,7 @@ export default function BlogArticleLayout({
 
       <div className="mx-auto max-w-7xl px-4 py-10 md:py-14">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
-          <main className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm md:p-8 lg:p-10">
+          <article className="min-w-0 rounded-lg border border-primary/10 bg-white p-4 shadow-sm sm:p-6 md:p-8 lg:p-10">
             <Link
               href="/blog"
               className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent"
@@ -180,7 +180,7 @@ export default function BlogArticleLayout({
             </div>
 
             <div className="rounded-lg border border-primary/10 bg-[#f5f2ed]/80 p-5 md:p-8">{children}</div>
-          </main>
+          </article>
 
           <aside className="space-y-6 lg:sticky lg:top-28">
             <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm">

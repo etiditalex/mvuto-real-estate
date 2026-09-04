@@ -15,7 +15,7 @@ export default function PropertyCard({ property }: { property: CatalogProperty }
   const image = property.image;
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm transition-shadow hover:shadow-lg">
+    <article className="group min-w-0 overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm transition-shadow hover:shadow-lg">
       <div className="relative aspect-[4/3] overflow-hidden bg-primary/5">
         {image ? (
           <Image
@@ -32,7 +32,7 @@ export default function PropertyCard({ property }: { property: CatalogProperty }
         )}
       </div>
       <div className="p-5">
-        <h2 className="mb-2 text-xl font-semibold text-primary">{property.title}</h2>
+        <h2 className="mb-2 break-words text-lg font-semibold text-primary sm:text-xl">{property.title}</h2>
         <p className="mb-4 flex items-center gap-2 text-sm text-primary/70">
           <MapPin className="h-4 w-4 shrink-0" />
           {property.location}

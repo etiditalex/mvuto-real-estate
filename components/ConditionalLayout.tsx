@@ -17,7 +17,9 @@ export default function ConditionalLayout({
   return (
     <>
       {!isAdmin && <Header />}
-      <main className={isAdmin ? "" : undefined}>{children}</main>
+      <main id="main-content" className={isAdmin ? "" : "min-w-0 overflow-x-clip"}>
+        {children}
+      </main>
       {!isAdmin && <Footer />}
       {!isAdmin && <WhatsAppButton />}
     </>

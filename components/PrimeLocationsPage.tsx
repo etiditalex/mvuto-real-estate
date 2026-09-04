@@ -18,6 +18,8 @@ import type { CatalogProperty } from "@/lib/properties/catalog";
 import { getPaymentField, propertyPublicPath } from "@/lib/properties/catalog";
 import { formatKes } from "@/lib/admin/utils";
 import { propertyImageProps } from "@/lib/images";
+import FaqSection from "@/components/seo/FaqSection";
+import { PRIME_FAQS } from "@/lib/seo";
 
 const HERO_IMAGE =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771828649/hero_photo_fpus31.jpg";
@@ -69,7 +71,7 @@ export default function PrimeLocationsPage({ projects }: Props) {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="relative min-h-[560px] w-full overflow-hidden lg:min-h-[640px]">
+      <section className="relative min-h-[480px] w-full overflow-hidden sm:min-h-[560px] lg:min-h-[640px]">
         <Image
           {...propertyImageProps(HERO_IMAGE)}
           alt="Prime coastal land with MVUTO Real Estate"
@@ -80,14 +82,14 @@ export default function PrimeLocationsPage({ projects }: Props) {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/25" />
 
-        <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 py-20 pb-28 lg:min-h-[640px] lg:px-8 lg:py-28 lg:pb-32">
+        <div className="relative z-10 mx-auto flex min-h-[480px] max-w-7xl flex-col justify-center px-4 py-16 pb-36 sm:min-h-[560px] sm:py-20 sm:pb-28 lg:min-h-[640px] lg:px-8 lg:py-28 lg:pb-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
             className="max-w-xl"
           >
-            <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
               Prime Plots.{" "}
               <span className="text-accent">Greater Possibilities.</span>
             </h1>
@@ -308,7 +310,7 @@ export default function PrimeLocationsPage({ projects }: Props) {
                   }`}
                 >
                   <item.icon className="h-5 w-5 text-accent" strokeWidth={1.5} />
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-primary sm:text-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-primary">
                     {item.label}
                   </span>
                 </div>
@@ -350,6 +352,7 @@ export default function PrimeLocationsPage({ projects }: Props) {
           </Link>
         </div>
       </section>
+      <FaqSection faqs={PRIME_FAQS} title="Prime Coast land — your questions" />
     </div>
   );
 }

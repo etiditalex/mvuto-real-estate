@@ -4,6 +4,9 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { COMPANY_EMAIL, COMPANY_LOCATION, COMPANY_PHONE_DISPLAY, COMPANY_PHONE_E164 } from "@/lib/site";
+import FaqSection from "@/components/seo/FaqSection";
+import { CONTACT_FAQS } from "@/lib/seo";
 
 export default function ContactPage() {
   return (
@@ -79,14 +82,14 @@ function ContactForm() {
   };
 
   return (
-    <div className="py-16 lg:py-24">
+    <div className="py-12 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 text-center"
         >
-          <h1 className="mb-4 text-3xl font-bold text-primary lg:text-4xl">Contact Us</h1>
+          <h1 className="mb-4 text-2xl font-bold text-primary sm:text-3xl lg:text-4xl">Contact Us</h1>
           <p className="mx-auto max-w-2xl text-primary/80">
             Get in touch with our team for personalized real estate guidance and exclusive access to
             prime properties across Kenya.
@@ -98,12 +101,12 @@ function ContactForm() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-xl bg-primary p-8 text-white"
+            className="rounded-xl bg-primary p-5 text-white sm:p-8"
           >
             <h2 className="mb-6 text-xl font-semibold text-accent">Get in Touch</h2>
             <div className="space-y-6">
               <a
-                href="tel:+254725111444"
+                href={`tel:${COMPANY_PHONE_E164}`}
                 className="flex items-center gap-4 transition-colors hover:text-accent"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blend">
@@ -111,11 +114,11 @@ function ContactForm() {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Phone</p>
-                  <p className="font-medium">+254 725 111 444</p>
+                  <p className="font-medium">{COMPANY_PHONE_DISPLAY}</p>
                 </div>
               </a>
               <a
-                href="mailto:info@mvuto.co.ke"
+                href={`mailto:${COMPANY_EMAIL}`}
                 className="flex items-center gap-4 transition-colors hover:text-accent"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blend">
@@ -123,7 +126,7 @@ function ContactForm() {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Email</p>
-                  <p className="font-medium">info@mvuto.co.ke</p>
+                  <p className="font-medium">{COMPANY_EMAIL}</p>
                 </div>
               </a>
               <div className="flex items-center gap-4">
@@ -132,7 +135,7 @@ function ContactForm() {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Location</p>
-                  <p className="font-medium">Kenya</p>
+                  <p className="font-medium">{COMPANY_LOCATION}</p>
                 </div>
               </div>
             </div>
@@ -142,7 +145,7 @@ function ContactForm() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="rounded-xl border border-primary/10 bg-white p-8 shadow-sm"
+            className="rounded-xl border border-primary/10 bg-white p-5 shadow-sm sm:p-8"
           >
             <h2 className="mb-6 text-xl font-semibold text-primary">Send a Message</h2>
             {propertyName ? (
@@ -222,6 +225,7 @@ function ContactForm() {
           </motion.div>
         </div>
       </div>
+      <FaqSection faqs={CONTACT_FAQS} title="Before you get in touch" />
     </div>
   );
 }

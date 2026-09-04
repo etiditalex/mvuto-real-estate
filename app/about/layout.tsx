@@ -1,20 +1,36 @@
 import type { Metadata } from "next";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, buildMetadata, webPageSchema } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Learn about MVUTO Real Estate Ltd. Your trusted partner for land and property in Kenya. Expertise in Coast region, land acquisition and investment.",
-  openGraph: {
-    title: "About Us | MVUTO Real Estate Ltd",
-    description:
-      "Your trusted partner for land and property in Kenya. Expertise in Coast region and investment facilitation.",
-  },
-};
+const title = "About MVUTO Real Estate";
+const description =
+  "MVUTO Real Estate Ltd is your Kenya Coast land partner — verified titles, clear pricing, and support from enquiry to title deed in Kilifi, Diani, Mariakani and Bofa.";
 
-export default function AboutLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
+export const metadata: Metadata = buildMetadata({
+  title,
+  description,
+  path: "/about",
+  keywords: [
+    "about MVUTO Real Estate",
+    "Kenya Coast real estate company",
+    "trusted land seller Kilifi",
+    "titled land Kenya",
+  ],
+});
+
+export default function AboutLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/about", title, description }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About Us", path: "/about" },
+          ]),
+        ]}
+      />
+      {children}
+    </>
+  );
 }

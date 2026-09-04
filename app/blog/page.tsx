@@ -5,6 +5,8 @@ import BlogsHeroCarousel from "@/components/blog/BlogsHeroCarousel";
 import BlogsArchiveMain from "@/components/blog/BlogsArchiveMain";
 import BlogsArchiveSidebar from "@/components/blog/BlogsArchiveSidebar";
 import { useBlogPosts } from "@/lib/blog/useBlogPosts";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, webPageSchema } from "@/lib/seo";
 
 function BlogsArchiveMainFallback() {
   return (
@@ -38,6 +40,21 @@ export default function BlogIndexPage() {
 
   return (
     <div className="pb-20">
+      <JsonLd
+        data={[
+          webPageSchema({
+            path: "/blog",
+            title: "Property & Land Investment Blog",
+            description:
+              "Guides on buying titled land on Kenya's Coast — Kilifi, Diani and Mariakani plots, payment plans, titles and investing with MVUTO.",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+            { name: "Blog", path: "/blog" },
+          ]),
+        ]}
+      />
       <h1 className="sr-only">Blogs — expert property insights from MVUTO Real Estate</h1>
       <BlogsHeroCarousel posts={sortedPosts} />
 

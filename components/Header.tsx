@@ -76,7 +76,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex 2xl:gap-8">
           {navLinks.map((link) =>
             "dropdown" in link && link.dropdown ? (
               <div
@@ -146,7 +146,7 @@ export default function Header() {
         </div>
 
         {/* Contact + CTA */}
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           <a
             href="tel:+254798359389"
             className="flex items-center gap-2 text-white/90 transition-colors hover:text-accent"
@@ -165,7 +165,7 @@ export default function Header() {
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex h-10 w-10 items-center justify-center text-white lg:hidden"
+          className="flex h-11 w-11 items-center justify-center text-white xl:hidden"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -179,7 +179,7 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-white/10 lg:hidden"
+            className="max-h-[min(80vh,calc(100dvh-4.5rem))] overflow-y-auto overflow-x-hidden border-t border-white/10 xl:hidden"
           >
             <div className="space-y-1 px-4 py-4">
               {navLinks.map((link) => (
@@ -187,7 +187,7 @@ export default function Header() {
                   <Link
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block rounded-lg px-4 py-3 ${
+                    className={`block min-h-11 rounded-lg px-4 py-3 ${
                       isActive(link.href, "dropdown" in link ? link.dropdown : undefined)
                         ? "bg-accent-blend text-accent"
                         : "text-white/90 hover:bg-white/5"

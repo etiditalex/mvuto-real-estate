@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { propertyImageProps } from "@/lib/images";
+import FaqSection from "@/components/seo/FaqSection";
+import { ABOUT_FAQS } from "@/lib/seo";
 
 const WHO_WE_ARE_IMAGE =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1788437007/who_we_are_lys4wa.jpg";
@@ -47,7 +49,7 @@ export default function AboutPage() {
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10 px-4 text-center text-3xl font-bold uppercase tracking-[0.12em] text-primary md:text-4xl lg:mb-12 lg:text-5xl"
+          className="mb-10 px-4 text-center text-2xl font-bold uppercase tracking-[0.08em] text-primary sm:text-3xl sm:tracking-[0.12em] md:text-4xl lg:mb-12 lg:text-5xl"
         >
           Who We Are
         </motion.h1>
@@ -83,7 +85,7 @@ export default function AboutPage() {
                 }`}
                 aria-hidden
               />
-              <div className="px-8 py-10 lg:px-12 lg:py-14">
+              <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14">
                 <h2 className="mb-5 text-2xl font-bold text-primary lg:text-3xl">Our Vision</h2>
                 <p
                   className={`text-base leading-relaxed lg:text-lg ${
@@ -163,7 +165,7 @@ export default function AboutPage() {
                 }`}
                 aria-hidden
               />
-              <div className="px-8 py-10 lg:px-12 lg:py-14">
+              <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14">
                 <h2 className="mb-5 text-2xl font-bold text-primary lg:text-3xl">Our Mission</h2>
                 <p
                   className={`text-base leading-relaxed lg:text-lg ${
@@ -312,6 +314,7 @@ export default function AboutPage() {
           </ol>
         </div>
       </section>
+      <FaqSection faqs={ABOUT_FAQS} title="About MVUTO — common questions" />
     </div>
   );
 }

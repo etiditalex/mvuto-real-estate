@@ -51,7 +51,7 @@ export default function NewsPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="mb-6 flex items-center gap-2 text-primary/60">
+              <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-primary/60 sm:text-base">
                 <Link href="/" className="flex items-center transition hover:text-accent">
                   <Home size={18} className="stroke-2" />
                 </Link>
@@ -63,7 +63,7 @@ export default function NewsPage() {
                 <span className="font-medium text-primary">News</span>
               </div>
 
-              <h1 className="mb-4 text-4xl font-bold text-primary md:text-5xl lg:text-6xl">
+              <h1 className="mb-4 text-3xl font-bold text-primary sm:text-4xl md:text-5xl lg:text-6xl">
                 News &amp; Updates
               </h1>
               <p className="text-lg text-primary/70 md:text-xl">
@@ -147,7 +147,7 @@ export default function NewsPage() {
               className="overflow-hidden rounded-xl bg-white shadow-lg transition hover:shadow-xl"
             >
               <div className="grid gap-0 md:grid-cols-2">
-                <div className="relative flex h-64 min-h-[400px] items-center justify-center bg-[#f5f2ed] p-6 md:h-auto">
+                <div className="relative flex min-h-[220px] items-center justify-center bg-[#f5f2ed] p-4 sm:min-h-[280px] sm:p-6 md:min-h-[320px] lg:min-h-[400px]">
                   <div className="relative h-full w-full">
                     <Image
                       {...propertyImageProps(item.image)}

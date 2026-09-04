@@ -2,11 +2,24 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Newspaper, Megaphone, BarChart3, ArrowRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, buildMetadata, webPageSchema } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Insights",
-  description: "MVUTO blog, news updates, and Kenya Coast market research.",
-};
+const title = "Insights on Kenya Coast Land";
+const description =
+  "MVUTO insights: land-buying guides, Coast project news, and Kenya market research for Kilifi, Diani and Mariakani buyers.";
+
+export const metadata: Metadata = buildMetadata({
+  title,
+  description,
+  path: "/insights",
+  keywords: [
+    "Kenya Coast land insights",
+    "MVUTO blog",
+    "Kilifi land news",
+    "Kenya real estate research",
+  ],
+});
 
 const cards = [
   {
@@ -32,14 +45,23 @@ const cards = [
 export default function InsightsPage() {
   return (
     <div>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/insights", title, description }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+          ]),
+        ]}
+      />
       <PageHero title="Insights" />
       <section className="bg-[#f5f2ed] py-16 lg:py-24">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-3 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:gap-8 md:grid-cols-3 lg:px-8">
           {cards.map((card) => (
             <Link
               key={card.href}
               href={card.href}
-              className="group rounded-xl border border-primary/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-accent hover:shadow-md"
+              className="group rounded-xl border border-primary/10 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-accent hover:shadow-md sm:p-8"
             >
               <card.icon className="mb-4 h-10 w-10 text-accent" strokeWidth={1.5} />
               <h2 className="text-2xl font-bold text-primary">{card.title}</h2>

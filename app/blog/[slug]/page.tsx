@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BlogArticleLayout from "@/components/blog/BlogArticleLayout";
+import JsonLd from "@/components/seo/JsonLd";
 import { fetchPublishedBlogBySlug } from "@/lib/blog/getBlogs";
+import { articleSchemaExtra, breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { COMPANY_NAME, SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -11,11 +13,18 @@ type PageProps = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await fetchPublishedBlogBySlug(slug);
-  if (!post) return { title: "Article not found" };
-  return {
+  if (!post) return { title: "Article not found", robots: { index: false, follow: true } };
+  return buildMetadata({
     title: post.title,
     description: post.excerpt,
-  };
+    path: `/blog/${post.slug}`,
+    image: post.image,
+    imageAlt: post.hero_image_alt || post.title,
+    type: "article",
+    publishedTime: post.date,
+    modifiedTime: post.date,
+    keywords: [post.category, "Kenya Coast land", "MVUTO Real Estate", post.title],
+  });
 }
 
 export default async function BlogArticlePage({ params }: PageProps) {
@@ -24,30 +33,30 @@ export default async function BlogArticlePage({ params }: PageProps) {
   if (!post) notFound();
 
   const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    image: post.image,
-    datePublished: `${post.date.slice(0, 10)}T08:00:00+03:00`,
-    dateModified: `${post.date.slice(0, 10)}T08:00:00+03:00`,
-    author: {
-      "@type": "Organization",
-      name: post.author,
-      url: SITE_URL,
-    },
+    ...articleSchemaExtra({
+      title: post.title,
+      description: post.excerpt,
+      image: post.image,
+      date: `${post.date.slice(0, 10)}T08:00:00+03:00`,
+      author: post.author,
+      slug: post.slug,
+    }),
     publisher: {
       "@type": "Organization",
       name: COMPANY_NAME,
       url: SITE_URL,
     },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_URL}/blog/${post.slug}`,
-    },
   };
 
+  const crumbs = breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]);
+
   return (
+    <>
+    <JsonLd data={crumbs} />
     <BlogArticleLayout
       currentSlug={post.slug}
       title={post.title}
@@ -66,5 +75,6 @@ export default async function BlogArticlePage({ params }: PageProps) {
         }}
       />
     </BlogArticleLayout>
+    </>
   );
 }

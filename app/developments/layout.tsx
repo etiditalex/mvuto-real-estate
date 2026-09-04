@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Developments",
+export const metadata: Metadata = buildMetadata({
+  title: "Land Developments Kenya Coast",
   description:
-    "Explore MVUTO Real Estate developments. Prime and emerging locations in Kenya. Land and property projects in Coast region.",
-  openGraph: {
-    title: "Developments | MVUTO Real Estate Ltd",
-    description:
-      "Explore our developments. Prime and emerging locations in Kenya.",
-  },
-};
+    "Explore MVUTO land developments on Kenya's Coast — prime and emerging locations with verified titles and flexible payment plans in Kilifi, Diani and Mariakani.",
+  path: "/developments",
+  keywords: [
+    "Kenya Coast land developments",
+    "Kilifi land projects",
+    "Diani plots development",
+    "MVUTO developments",
+  ],
+});
 
-export default function DevelopmentsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DevelopmentsLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

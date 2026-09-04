@@ -57,7 +57,7 @@ export default function BlogsHeroCarousel({ posts }: Props) {
             key={post.id}
             href={`/blog/${post.slug}`}
             data-carousel-card
-            className="group relative h-[min(52vh,480px)] min-h-[380px] w-[min(88vw,340px)] shrink-0 snap-center snap-always overflow-hidden bg-primary sm:w-[min(78vw,380px)] md:h-[min(56vh,520px)] md:min-h-[420px] md:w-[min(46vw,420px)] lg:h-[520px] lg:w-[min(calc(33.333vw-12px),400px)] xl:w-[min(calc(33.333vw-16px),440px)]"
+            className="group relative h-[min(48vh,420px)] min-h-[320px] w-[min(88vw,340px)] shrink-0 snap-center snap-always overflow-hidden bg-primary sm:w-[min(78vw,380px)] md:h-[min(52vh,480px)] md:min-h-[380px] md:w-[min(46vw,420px)] lg:h-[520px] lg:w-[min(calc(33.333vw-12px),400px)] xl:w-[min(calc(33.333vw-16px),440px)]"
           >
             <Image
               {...propertyImageProps(post.image)}
@@ -78,7 +78,7 @@ export default function BlogsHeroCarousel({ posts }: Props) {
               <span className="mt-3 line-clamp-4 text-xl font-bold leading-snug tracking-tight text-white md:text-2xl lg:text-[1.65rem] lg:leading-tight">
                 {post.title}
               </span>
-              <span className="mt-4 block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-accent md:text-xs">
+              <span className="mt-4 block text-xs font-semibold uppercase tracking-[0.16em] text-accent">
                 {formatBlogDateCarousel(post.date)}
               </span>
             </div>
@@ -97,7 +97,7 @@ export default function BlogsHeroCarousel({ posts }: Props) {
         <button
           type="button"
           onClick={() => scrollStep(-1)}
-          className="flex h-10 w-10 items-center justify-center border border-white/20 bg-white text-primary"
+          className="flex h-11 w-11 items-center justify-center border border-white/20 bg-white text-primary"
           aria-label="Previous posts"
         >
           <ChevronLeft className="h-5 w-5" aria-hidden />
@@ -105,7 +105,7 @@ export default function BlogsHeroCarousel({ posts }: Props) {
         <button
           type="button"
           onClick={() => scrollStep(1)}
-          className="flex h-10 w-10 items-center justify-center border border-white/20 bg-white text-primary"
+          className="flex h-11 w-11 items-center justify-center border border-white/20 bg-white text-primary"
           aria-label="Next posts"
         >
           <ChevronRight className="h-5 w-5" aria-hidden />

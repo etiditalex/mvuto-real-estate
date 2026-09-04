@@ -18,7 +18,7 @@ export default function PageHero({ title }: { title: string }) {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-bold text-white lg:text-4xl"
+            className="break-words text-2xl font-bold text-white sm:text-3xl lg:text-4xl"
           >
             {title}
           </motion.h1>

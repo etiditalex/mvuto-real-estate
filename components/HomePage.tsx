@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
 import HomeTestimonials from "@/components/HomeTestimonials";
+import FaqSection from "@/components/seo/FaqSection";
+import { HOME_FAQS } from "@/lib/seo";
 import type { CatalogProperty } from "@/lib/properties/catalog";
 
 const HERO_IMAGE_URL =
@@ -80,7 +82,7 @@ const itemVariants = {
 export default function HomePage({ featuredProperties }: { featuredProperties: CatalogProperty[] }) {
   return (
     <>
-      <section className="relative overflow-hidden py-20 lg:py-28">
+      <section className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
         <div
           className="absolute inset-0 scale-110 bg-cover bg-center bg-no-repeat blur-lg"
           style={{ backgroundImage: `url("${HERO_IMAGE_URL}")` }}
@@ -94,10 +96,13 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
             transition={{ duration: 0.6 }}
             className="flex w-full flex-col items-center text-center"
           >
-            <h1 className="mb-8 text-4xl font-bold text-white lg:text-5xl xl:text-6xl">
+            <h1 className="mb-6 break-words text-3xl font-bold text-white sm:mb-8 sm:text-4xl lg:text-5xl xl:text-6xl">
               Coastal&apos;s Gate to <span className="text-accent">Real Estate</span>
             </h1>
-            <p className="mb-10 w-full max-w-7xl text-center text-lg leading-relaxed text-white lg:text-xl">
+            <p
+              data-aeo-answer
+              className="mb-8 w-full max-w-7xl text-center text-base leading-relaxed text-white sm:mb-10 sm:text-lg lg:text-xl"
+            >
               <span className="block">
                 We Connect Global Investors to Coastal&apos;s Property Market through Trust, Innovation, and Personalized Service & Partnership,
               </span>
@@ -107,7 +112,7 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
             </p>
             <Link
               href="/for-sale"
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-8 py-3 font-medium text-primary transition-colors hover:bg-accent-blend"
+              className="inline-flex min-h-12 items-center gap-2 rounded-md bg-accent px-6 py-3 font-medium text-primary transition-colors hover:bg-accent-blend sm:px-8"
             >
               Discover More
               <ArrowRight className="h-5 w-5" />
@@ -188,6 +193,8 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
       </section>
 
       <HomeTestimonials />
+
+      <FaqSection faqs={HOME_FAQS} title="Questions about buying land with MVUTO" />
 
       <section className="bg-primary py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 text-center lg:px-8">

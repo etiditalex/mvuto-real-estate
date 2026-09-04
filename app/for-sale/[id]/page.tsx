@@ -7,6 +7,8 @@ import { fetchPropertyDetail } from "@/lib/properties/getProperties";
 import { getPaymentField } from "@/lib/properties/catalog";
 import { formatKes } from "@/lib/admin/utils";
 import { propertyImageProps } from "@/lib/images";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, buildMetadata, propertyOfferSchema } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -17,11 +19,22 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const property = await fetchPropertyDetail(id);
-  if (!property) return { title: "Property not found" };
-  return {
-    title: property.title,
-    description: `${property.title} in ${property.location}. ${formatKes(property.price)}.`,
-  };
+  if (!property) return { title: "Property not found", robots: { index: false, follow: true } };
+  const description = `${property.title} in ${property.location} — ${formatKes(property.price)}. Titled land for sale on Kenya's Coast with flexible payment plans from MVUTO.`;
+  return buildMetadata({
+    title: `${property.title} — ${property.location}`,
+    description,
+    path: `/for-sale/${property.slug}`,
+    image: property.image,
+    imageAlt: property.title,
+    keywords: [
+      property.title,
+      `land for sale ${property.location}`,
+      "plots for sale Kenya Coast",
+      "titled land Kenya",
+      "MVUTO Real Estate",
+    ],
+  });
 }
 
 export default async function PropertyForSalePage({ params }: PageProps) {
@@ -39,7 +52,24 @@ export default async function PropertyForSalePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8 lg:py-16">
+      <JsonLd
+        data={[
+          propertyOfferSchema({
+            title: property.title,
+            description: property.description,
+            location: property.location,
+            price: property.price,
+            image: property.image,
+            slug: property.slug,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "For Sale", path: "/for-sale" },
+            { name: property.title, path: `/for-sale/${property.slug}` },
+          ]),
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-16">
         <Link
           href="/for-sale"
           className="mb-8 inline-flex items-center gap-2 text-primary/80 transition-colors hover:text-primary"
@@ -67,7 +97,7 @@ export default async function PropertyForSalePage({ params }: PageProps) {
           </div>
 
           <div>
-            <h1 className="mb-4 text-3xl font-bold text-primary lg:text-4xl">
+            <h1 className="mb-4 break-words text-2xl font-bold text-primary sm:text-3xl lg:text-4xl">
               {property.h1 || property.title}
             </h1>
             <p className="mb-6 flex items-center gap-2 text-primary/70">
@@ -75,10 +105,10 @@ export default async function PropertyForSalePage({ params }: PageProps) {
               {property.location}
             </p>
 
-            <div className="mb-8 space-y-4 rounded-xl border border-primary/10 bg-primary/5 p-6">
-              <div className="flex justify-between border-b border-primary/10 pb-3">
+            <div className="mb-8 space-y-4 rounded-xl border border-primary/10 bg-primary/5 p-4 sm:p-6">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-primary/10 pb-3">
                 <span className="text-primary/70">Price</span>
-                <span className="text-xl font-semibold text-primary">{formatKes(property.price)}</span>
+                <span className="text-lg font-semibold text-primary sm:text-xl">{formatKes(property.price)}</span>
               </div>
               {deposit ? (
                 <div className="flex justify-between border-b border-primary/10 pb-3">

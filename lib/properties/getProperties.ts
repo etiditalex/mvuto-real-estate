@@ -3,7 +3,11 @@ import type { Property } from "@/lib/supabase/types";
 import { STATIC_PROPERTY_CATALOG, type CatalogProperty } from "./catalog";
 import { mapDbPropertyToDetail, type PropertyDetail } from "./mapProperty";
 import { parseGalleryUrls } from "@/lib/images";
-import { getHomepageProperties, sortPropertiesNewestFirst } from "./sortProperties";
+import {
+  getAvailableProperties,
+  getHomepageProperties,
+  sortPropertiesNewestFirst,
+} from "./sortProperties";
 
 function getPublicClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -110,4 +114,11 @@ export async function fetchPropertyDetail(idOrSlug: string): Promise<PropertyDet
 
 export async function fetchFeaturedProperties(limit = 4): Promise<CatalogProperty[]> {
   return getHomepageProperties(await fetchPublishedProperties(), limit);
+}
+
+export async function fetchEmergingProperties(limit = 6): Promise<CatalogProperty[]> {
+  const all = await fetchPublishedProperties();
+  const emerging = all.filter((p) => !p.featured && p.status !== "sold");
+  const source = emerging.length ? emerging : getAvailableProperties(all).slice(-limit);
+  return sortPropertiesNewestFirst(source).slice(0, limit);
 }

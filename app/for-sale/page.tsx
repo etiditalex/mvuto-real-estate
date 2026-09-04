@@ -5,6 +5,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
+import FaqSection from "@/components/seo/FaqSection";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, SALE_FAQS, webPageSchema } from "@/lib/seo";
 import { STATIC_PROPERTY_CATALOG, type CatalogProperty } from "@/lib/properties/catalog";
 import { sortPropertiesNewestFirst } from "@/lib/properties/sortProperties";
 
@@ -51,6 +54,20 @@ export default function ForSalePage() {
 
   return (
     <div>
+      <JsonLd
+        data={[
+          webPageSchema({
+            path: "/for-sale",
+            title: "Land & Plots for Sale in Kenya",
+            description:
+              "Browse titled land and plots for sale on Kenya's Coast. Chumani, Diani, Mariakani, Bofa and more — prices, deposits and flexible payment plans from MVUTO.",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "For Sale", path: "/for-sale" },
+          ]),
+        ]}
+      />
       <section className="relative min-h-[240px] overflow-hidden py-12 lg:min-h-[280px] lg:py-16">
         <div className="absolute inset-0" aria-hidden>
           <Image
@@ -68,7 +85,7 @@ export default function ForSalePage() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl font-bold text-white lg:text-4xl"
+              className="break-words text-2xl font-bold text-white sm:text-3xl lg:text-4xl"
             >
               Properties For Sale
             </motion.h1>
@@ -115,6 +132,7 @@ export default function ForSalePage() {
           </motion.div>
         )}
       </div>
+      <FaqSection faqs={SALE_FAQS} title="Buying land on Kenya's Coast" />
     </div>
   );
 }
