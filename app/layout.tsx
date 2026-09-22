@@ -1,13 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import { COMPANY_NAME, DEFAULT_OG_IMAGE, LOGO_URL, SITE_URL } from "@/lib/site";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const inter = Inter({ subsets: ["latin"] });
@@ -94,6 +92,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-KE">
+      <head>
+        {/* Google tag (gtag.js) — one tag for every page via the root layout */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CMG2JFNFP7" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CMG2JFNFP7');`,
+          }}
+        />
+      </head>
       <body className={`${inter.className} antialiased`}>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <a
@@ -103,17 +113,6 @@ export default function RootLayout({
           Skip to content
         </a>
         <ConditionalLayout>{children}</ConditionalLayout>
-        {GA_ID ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
-            </Script>
-          </>
-        ) : null}
       </body>
     </html>
   );
