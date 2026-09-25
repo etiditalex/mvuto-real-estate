@@ -2,8 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, User } from "lucide-react";
 import { STATIC_TESTIMONIALS, type StaticTestimonial } from "@/lib/testimonials/catalog";
 import { LOGO_URL } from "@/lib/site";
 import type { ClientTestimonial } from "@/lib/supabase/types";
@@ -34,6 +33,7 @@ export default function HomeTestimonials() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
   const [formNote, setFormNote] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     fetch("/api/content/testimonials", { cache: "no-store" })
@@ -59,7 +59,7 @@ export default function HomeTestimonials() {
           seen.add(key);
           return true;
         });
-        setItems(merged.slice(0, 3 + stored.length));
+        setItems(merged);
       })
       .catch(() => {});
   }, []);
@@ -105,6 +105,7 @@ export default function HomeTestimonials() {
       };
       storeReview(review);
       setItems((current) => [review, ...current.filter((item) => item.text !== review.text || item.name !== review.name)]);
+      setActiveIndex(0);
       setName("");
       setEmail("");
       setMessage("");
@@ -133,31 +134,58 @@ export default function HomeTestimonials() {
             All testimonials <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {items.map((item, index) => (
-            <motion.article
-              key={item.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="rounded-xl border border-primary/10 bg-white p-6 shadow-sm"
-            >
-              <div className="mb-3 flex gap-0.5">
-                {Array.from({ length: item.rating }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                ))}
+        {items.length > 0 ? (
+          <div className="mx-auto max-w-4xl">
+            <article className="bg-[#f3f3f3] px-6 py-8 sm:px-10 sm:py-10">
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                  <User size={26} strokeWidth={2.25} />
+                </span>
+                <h3 className="text-lg font-bold text-primary sm:text-xl">
+                  {items[activeIndex % items.length]?.name}
+                </h3>
               </div>
-              <p className="line-clamp-4 text-sm leading-relaxed text-primary/75">
-                &ldquo;{item.text}&rdquo;
+              <p className="mt-5 text-base leading-relaxed text-neutral-900 sm:text-[17px]">
+                {items[activeIndex % items.length]?.text}
               </p>
-              <p className="mt-4 font-bold text-primary">{item.name}</p>
-              <p className="text-xs text-primary/50">
-                {item.property} · {item.location}
-              </p>
-            </motion.article>
-          ))}
-        </div>
+            </article>
+            {items.length > 1 ? (
+              <div className="mt-5 flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => setActiveIndex((index) => (index - 1 + items.length) % items.length)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <div className="flex items-center gap-2" role="tablist" aria-label="Testimonials">
+                  {items.map((item, index) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={index === activeIndex}
+                      aria-label={`Show review from ${item.name}`}
+                      onClick={() => setActiveIndex(index)}
+                      className={`h-2.5 rounded-full transition ${
+                        index === activeIndex ? "w-6 bg-primary" : "w-2.5 bg-primary/25"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveIndex((index) => (index + 1) % items.length)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <form onSubmit={submitReview} className="mx-auto mt-14 max-w-3xl">
           <p className="text-base font-semibold leading-relaxed text-primary sm:text-lg">
