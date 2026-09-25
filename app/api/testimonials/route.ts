@@ -37,11 +37,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, offline: true, review });
     }
 
-    const { data, error } = await supabase
+    const { data: latest } = await supabase
       .from("client_testimonials")
-      .insert(review)
-      .select("id, name, location, property, rating, text, image, sort_order")
-      .single();
+      .select("id")
+      .order("id", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    let nextId = (latest?.id ?? 0) + 1;
+    let data = null;
+    let error: { message: string; code?: string } | null = null;
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const inserted = await supabase
+        .from("client_testimonials")
+        .insert({ ...review, id: nextId })
+        .select("id, name, location, property, rating, text, image, sort_order")
+        .single();
+      data = inserted.data;
+      error = inserted.error;
+      if (!error || error.code !== "23505") break;
+      nextId += 1;
+    }
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
