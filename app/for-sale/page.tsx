@@ -34,6 +34,11 @@ export default function ForSalePage() {
   );
 
   useEffect(() => {
+    const area = new URLSearchParams(window.location.search).get("q");
+    if (area) setQuery(area);
+  }, []);
+
+  useEffect(() => {
     fetch("/api/content/properties", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {

@@ -1,21 +1,130 @@
 "use client";
 
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  MapPin,
-  Home,
+  Check,
+  ChevronDown,
   CircleDollarSign,
-  Heart,
-  TrendingUp,
   FileCheck,
+  Heart,
+  Home,
+  MapPin,
+  MessageCircle,
+  Phone,
+  TrendingUp,
 } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
 import HomeTestimonials from "@/components/HomeTestimonials";
-import FaqSection from "@/components/seo/FaqSection";
-import { HOME_FAQS } from "@/lib/seo";
 import type { CatalogProperty } from "@/lib/properties/catalog";
+import { COMPANY_PHONE_E164 } from "@/lib/site";
+
+const COASTAL_AREAS = ["Chumani", "Mariakani", "Kaloleni", "Diani", "Bofa", "Kibao Kiche"] as const;
+
+const PLOT_FINDER_POINTS = [
+  "Verified titles for buyers",
+  "A deposit, then monthly instalments",
+  "Projects from Kilifi to Diani",
+  "Flexible 12-month payment plans",
+];
+
+function CoastalPlotFinder() {
+  const router = useRouter();
+  const [area, setArea] = useState("");
+
+  const browsePlots = (event: FormEvent) => {
+    event.preventDefault();
+    const params = new URLSearchParams();
+    if (area) params.set("q", area);
+    router.push(params.toString() ? `/for-sale?${params}` : "/for-sale");
+  };
+
+  return (
+    <section id="find-a-plot" aria-labelledby="find-a-plot-heading" className="bg-white pb-8 pt-10 lg:pb-10 lg:pt-14">
+      <div className="mx-auto max-w-3xl px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 id="find-a-plot-heading" className="text-3xl font-bold text-accent lg:text-4xl">
+            Find a coastal plot that matches your plan.
+          </h2>
+          <p className="mt-3 text-base text-primary/80 lg:text-lg">
+            MVUTO Real Estate connects buyers to verified titled land on Kenya&apos;s Coast.
+          </p>
+          <p className="mt-1 text-base font-semibold text-primary lg:text-lg">
+            Open listings begin at KES 350,000
+          </p>
+
+          <form
+            role="search"
+            aria-label="Find plots by area"
+            onSubmit={browsePlots}
+            className="mx-auto mt-8 flex w-full max-w-xl items-center rounded-full border border-primary/15 bg-white p-1.5 shadow-md"
+          >
+            <div className="relative min-w-0 flex-1">
+              <select
+                value={area}
+                onChange={(event) => setArea(event.target.value)}
+                aria-label="Choose a project area"
+                className="w-full appearance-none bg-transparent py-3 pl-4 pr-10 text-sm text-primary/70 focus:outline-none sm:text-base"
+              >
+                <option value="">Choose a coastal area</option>
+                {COASTAL_AREAS.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={18}
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-primary/40"
+              />
+            </div>
+            <button
+              type="submit"
+              className="shrink-0 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 sm:px-6 sm:text-base"
+            >
+              View plots
+            </button>
+          </form>
+
+          <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            {PLOT_FINDER_POINTS.map((point) => (
+              <li key={point} className="flex items-center gap-1.5 text-sm text-primary/70">
+                <Check size={16} className="shrink-0 text-primary" strokeWidth={2.5} />
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={`tel:${COMPANY_PHONE_E164}`}
+              className="inline-flex items-center gap-2 rounded-full border-2 border-primary px-6 py-3 font-semibold text-primary transition hover:bg-primary/5"
+            >
+              <Phone size={18} />
+              Talk to an Expert
+            </a>
+            <a
+              href={`https://wa.me/254798359389?text=${encodeURIComponent("Hello MVUTO Real Estate, I would like help choosing a coastal plot.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-semibold text-white transition hover:bg-[#1ebe5d]"
+            >
+              <MessageCircle size={18} />
+              Chat with us
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
 const HERO_IMAGE_URL =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771828649/hero_photo_fpus31.jpg";
@@ -139,6 +248,8 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
         </div>
       </section>
 
+      <CoastalPlotFinder />
+
       <section className="w-full bg-white pb-16 pt-6 lg:pb-24 lg:pt-8">
         <motion.div
           initial="hidden"
@@ -193,8 +304,6 @@ export default function HomePage({ featuredProperties }: { featuredProperties: C
       </section>
 
       <HomeTestimonials />
-
-      <FaqSection faqs={HOME_FAQS} title="Questions about buying land with MVUTO" />
 
       <section className="bg-primary py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 text-center lg:px-8">

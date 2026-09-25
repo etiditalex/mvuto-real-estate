@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { STATIC_BLOG_POSTS, type BlogListItem } from "@/lib/blog/catalog";
+import { isMarketResearchPost } from "@/lib/market-research/catalog";
 
 function mapApiPost(p: {
   id: number;
@@ -52,7 +53,9 @@ export function useBlogPosts(): { posts: BlogListItem[]; loading: boolean } {
           bySlug.set(post.slug, post);
         }
         setPosts(
-          [...bySlug.values()].sort((a, b) => b.date.localeCompare(a.date))
+          [...bySlug.values()]
+            .filter((post) => !isMarketResearchPost(post.category))
+            .sort((a, b) => b.date.localeCompare(a.date))
         );
       })
       .catch(() => {})

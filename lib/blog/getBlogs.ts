@@ -1,5 +1,9 @@
 import { getPublicSupabase } from "@/lib/supabase/public";
 import { STATIC_BLOG_POSTS, type BlogListItem } from "@/lib/blog/catalog";
+import {
+  isMarketResearchPost,
+  STATIC_MARKET_ARTICLES,
+} from "@/lib/market-research/catalog";
 import type { BlogPost } from "@/lib/supabase/types";
 
 export function mapBlogRow(row: {
@@ -41,7 +45,31 @@ export async function fetchPublishedBlogs(): Promise<BlogListItem[]> {
     .order("published_at", { ascending: false });
 
   if (!data?.length) return STATIC_BLOG_POSTS;
-  return (data as BlogPost[]).map(mapBlogRow);
+  return (data as BlogPost[])
+    .map(mapBlogRow)
+    .filter((post) => !isMarketResearchPost(post.category));
+}
+
+export async function fetchPublishedMarketResearch(): Promise<BlogListItem[]> {
+  const supabase = getPublicSupabase();
+  const staticArticles = STATIC_MARKET_ARTICLES;
+  if (!supabase) return staticArticles;
+
+  const { data } = await supabase
+    .from("blog_posts")
+    .select("id, title, excerpt, author, published_at, image, category, slug, content_html")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+
+  const fromDb = ((data as BlogPost[]) || [])
+    .map(mapBlogRow)
+    .filter((post) => isMarketResearchPost(post.category));
+  if (!fromDb.length) return staticArticles;
+
+  const bySlug = new Map<string, BlogListItem>();
+  for (const post of [...staticArticles, ...fromDb]) bySlug.set(post.slug, post);
+  for (const post of fromDb) bySlug.set(post.slug, post);
+  return [...bySlug.values()].sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export async function fetchPublishedBlogBySlug(slug: string): Promise<BlogListItem | null> {
@@ -55,5 +83,9 @@ export async function fetchPublishedBlogBySlug(slug: string): Promise<BlogListIt
       .maybeSingle();
     if (data) return mapBlogRow(data as BlogPost);
   }
-  return STATIC_BLOG_POSTS.find((p) => p.slug === slug) || null;
+  return (
+    STATIC_BLOG_POSTS.find((p) => p.slug === slug) ||
+    STATIC_MARKET_ARTICLES.find((p) => p.slug === slug) ||
+    null
+  );
 }

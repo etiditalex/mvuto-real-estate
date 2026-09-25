@@ -4,11 +4,13 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { ArrowLeft, Calendar, ChevronRight, User } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Calendar, ChevronRight, Home, User } from "lucide-react";
 import { formatIsoDate } from "@/lib/admin/utils";
 import { formatLongDateFromIso } from "@/lib/blog/dates";
 import { useBlogPosts } from "@/lib/blog/useBlogPosts";
+import { isMarketResearchPost, STATIC_MARKET_ARTICLES } from "@/lib/market-research/catalog";
+import type { BlogListItem } from "@/lib/blog/catalog";
 import { propertyImageProps } from "@/lib/images";
 import { SITE_URL } from "@/lib/site";
 
@@ -22,6 +24,9 @@ export type BlogArticleLayoutProps = {
   author: string;
   publishedIso: string;
   articleSchema: Record<string, unknown>;
+  archiveHref?: string;
+  archiveLabel?: string;
+  sectionName?: string;
   children: ReactNode;
 };
 
@@ -35,12 +40,17 @@ export default function BlogArticleLayout({
   author,
   publishedIso,
   articleSchema,
+  archiveHref = "/blog",
+  archiveLabel = "Back to blogs",
+  sectionName = "Blogs",
   children,
 }: BlogArticleLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [searchDraft, setSearchDraft] = useState("");
   const { posts } = useBlogPosts();
+  const isResearch = archiveHref === "/market-research";
+  const [researchPosts, setResearchPosts] = useState<BlogListItem[]>(STATIC_MARKET_ARTICLES);
 
   const pageUrl = `${SITE_URL}${pathname ?? ""}`;
   const encodedUrl = useMemo(() => encodeURIComponent(pageUrl), [pageUrl]);
@@ -73,15 +83,111 @@ export default function BlogArticleLayout({
     [encodedTitle, encodedUrl]
   );
 
-  const sidebarPosts = posts.filter((p) => p.slug !== currentSlug).slice(0, 8);
+  const sidebarSource = isResearch
+    ? researchPosts.filter((post) => isMarketResearchPost(post.category))
+    : posts;
+  const sidebarPosts = sidebarSource.filter((p) => p.slug !== currentSlug).slice(0, 8);
   const dateShort = formatIsoDate(publishedIso);
   const dateLong = formatLongDateFromIso(publishedIso);
+
+  useEffect(() => {
+    if (!isResearch) return;
+    fetch("/api/content/blogs", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => {
+        const articles: BlogListItem[] = (data.posts || [])
+          .filter((post: { category?: string }) => isMarketResearchPost(post.category))
+          .map(
+            (post: {
+              id: number;
+              title: string;
+              excerpt: string;
+              author: string;
+              published_at: string;
+              image: string;
+              category: string;
+              slug: string;
+            }) => ({
+              id: post.id,
+              title: post.title,
+              excerpt: post.excerpt,
+              author: post.author,
+              date: post.published_at,
+              image: post.image,
+              category: post.category,
+              slug: post.slug,
+            })
+          );
+        if (articles.length) setResearchPosts(articles);
+      })
+      .catch(() => {});
+  }, [isResearch]);
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const q = searchDraft.trim();
-    router.push(q ? `/blog?q=${encodeURIComponent(q)}` : "/blog");
+    router.push(q ? `${archiveHref}?q=${encodeURIComponent(q)}` : archiveHref);
   };
+
+  if (isResearch) {
+    const imageProps = heroImage ? propertyImageProps(heroImage) : null;
+
+    return (
+      <div className="min-h-screen bg-white pb-20 pt-8 md:pt-10">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+
+        <div className="mx-auto w-full px-4 md:px-6 lg:w-[75vw] lg:px-0">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-6 flex flex-wrap items-center gap-2 text-sm font-medium text-primary/50 md:mb-8"
+          >
+            <Link href="/" aria-label="Home" className="inline-flex text-primary hover:text-accent">
+              <Home size={18} strokeWidth={1.75} />
+            </Link>
+            <ChevronRight size={16} className="text-primary/30" aria-hidden />
+            <Link href={archiveHref} className="text-primary hover:text-accent">
+              {sectionName}
+            </Link>
+            <ChevronRight size={16} className="text-primary/30" aria-hidden />
+            <span className="text-primary/70">{displayTitle}</span>
+          </nav>
+
+          {imageProps ? (
+            <div className="relative aspect-[21/9] min-h-[240px] w-full overflow-hidden bg-primary/5 md:min-h-[420px]">
+              <Image
+                src={imageProps.src}
+                alt={heroImageAlt}
+                fill
+                priority
+                className="object-cover"
+                sizes="(min-width: 1280px) 1200px, 100vw"
+                quality={90}
+                unoptimized={imageProps.unoptimized}
+              />
+            </div>
+          ) : null}
+
+          <article className="w-full py-10 md:py-14">
+            <h1 className="text-3xl font-bold leading-tight text-primary md:text-4xl">{displayTitle}</h1>
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-primary/55">
+              <span className="flex items-center gap-2">
+                <Calendar size={16} aria-hidden />
+                {dateLong}
+              </span>
+              <span className="flex items-center gap-2">
+                <User size={16} aria-hidden />
+                {author}
+              </span>
+            </div>
+            <div className="mt-8">{children}</div>
+          </article>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f2ed]">
@@ -115,8 +221,8 @@ export default function BlogArticleLayout({
               <span className="text-white/50" aria-hidden>
                 /
               </span>
-              <Link href="/blog" className="hover:text-accent">
-                Blogs
+              <Link href={archiveHref} className="hover:text-accent">
+                {sectionName}
               </Link>
               <span className="text-white/50" aria-hidden>
                 /
@@ -137,11 +243,11 @@ export default function BlogArticleLayout({
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <article className="min-w-0 rounded-lg border border-primary/10 bg-white p-4 shadow-sm sm:p-6 md:p-8 lg:p-10">
             <Link
-              href="/blog"
+              href={archiveHref}
               className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent"
             >
               <ArrowLeft size={18} />
-              Back to blogs
+              {archiveLabel}
             </Link>
             <p className="mb-6 text-xs font-semibold uppercase tracking-wider text-accent">
               {category}
@@ -204,13 +310,15 @@ export default function BlogArticleLayout({
             </div>
 
             <div className="rounded-lg border border-primary/10 bg-white p-5 shadow-sm">
-              <h2 className="text-lg font-bold text-primary">Latest posts</h2>
+              <h2 className="text-lg font-bold text-primary">
+                {isResearch ? "Latest research" : "Latest posts"}
+              </h2>
               <div className="mt-2 border-b-2 border-accent" aria-hidden />
               <ul className="mt-4 divide-y divide-dotted divide-primary/15">
                 {sidebarPosts.map((post) => (
                   <li key={post.slug} className="py-3 first:pt-0 last:pb-0">
                     <Link
-                      href={`/blog/${post.slug}`}
+                      href={`${archiveHref}/${post.slug}`}
                       className="group flex gap-2 text-sm text-primary/75 hover:text-accent"
                     >
                       <ChevronRight

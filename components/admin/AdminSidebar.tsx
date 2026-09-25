@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/admin/utils";
 import { adminPath } from "@/lib/admin/path";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useState } from "react";
 import { useAdminShell } from "./AdminShellContext";
 import { LOGO_URL } from "@/lib/site";
@@ -48,8 +48,10 @@ export default function AdminSidebar({ badges = {}, logoUrl }: AdminSidebarProps
 
   const handleLogout = async () => {
     setLoggingOut(true);
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    }
     router.push(adminPath("login"));
     router.refresh();
   };

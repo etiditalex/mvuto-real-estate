@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { fetchPublishedProperties } from "@/lib/properties/getProperties";
 import { propertyPublicPath } from "@/lib/properties/catalog";
-import { fetchPublishedBlogs } from "@/lib/blog/getBlogs";
+import { fetchPublishedBlogs, fetchPublishedMarketResearch } from "@/lib/blog/getBlogs";
 import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [properties, blogs] = await Promise.all([
+  const [properties, blogs, research] = await Promise.all([
     fetchPublishedProperties(),
     fetchPublishedBlogs(),
+    fetchPublishedMarketResearch(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -47,5 +48,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...propertyPages, ...blogPages];
+  const researchPages: MetadataRoute.Sitemap = research.map((p) => ({
+    url: `${SITE_URL}/market-research/${p.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...propertyPages, ...blogPages, ...researchPages];
 }

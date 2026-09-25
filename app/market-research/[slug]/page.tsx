@@ -14,13 +14,13 @@ type PageProps = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await fetchPublishedBlogBySlug(slug);
-  if (!post || isMarketResearchPost(post.category)) {
+  if (!post || !isMarketResearchPost(post.category)) {
     return { title: "Article not found", robots: { index: false, follow: true } };
   }
   return buildMetadata({
     title: post.title,
     description: post.excerpt,
-    path: `/blog/${post.slug}`,
+    path: `/market-research/${post.slug}`,
     image: post.image,
     imageAlt: post.hero_image_alt || post.title,
     type: "article",
@@ -30,12 +30,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default async function BlogArticlePage({ params }: PageProps) {
+export default async function MarketResearchArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const post = await fetchPublishedBlogBySlug(slug);
   if (!post) notFound();
-  if (isMarketResearchPost(post.category)) {
-    permanentRedirect(`/market-research/${post.slug}`);
+  if (!isMarketResearchPost(post.category)) {
+    permanentRedirect(`/blog/${post.slug}`);
   }
 
   const articleSchema = {
@@ -52,35 +52,42 @@ export default async function BlogArticlePage({ params }: PageProps) {
       name: COMPANY_NAME,
       url: SITE_URL,
     },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/market-research/${post.slug}`,
+    },
   };
 
   const crumbs = breadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Blog", path: "/blog" },
-    { name: post.title, path: `/blog/${post.slug}` },
+    { name: "Market Research", path: "/market-research" },
+    { name: post.title, path: `/market-research/${post.slug}` },
   ]);
 
   return (
     <>
-    <JsonLd data={crumbs} />
-    <BlogArticleLayout
-      currentSlug={post.slug}
-      title={post.title}
-      heroTitle={post.hero_title}
-      heroImage={post.image}
-      heroImageAlt={post.hero_image_alt || post.title}
-      category={post.category}
-      author={post.author}
-      publishedIso={post.date}
-      articleSchema={articleSchema}
-    >
-      <div
-        className="space-y-4 text-base leading-relaxed text-primary/80 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-primary [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed [&_strong]:text-primary"
-        dangerouslySetInnerHTML={{
-          __html: post.content_html || `<p>${post.excerpt}</p>`,
-        }}
-      />
-    </BlogArticleLayout>
+      <JsonLd data={crumbs} />
+      <BlogArticleLayout
+        currentSlug={post.slug}
+        title={post.title}
+        heroTitle={post.hero_title}
+        heroImage={post.image}
+        heroImageAlt={post.hero_image_alt || post.title}
+        category={post.category}
+        author={post.author}
+        publishedIso={post.date}
+        articleSchema={articleSchema}
+        archiveHref="/market-research"
+        archiveLabel="Back to market research"
+        sectionName="Market Research"
+      >
+        <div
+          className="space-y-4 text-base leading-relaxed text-primary/80 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-primary [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed [&_strong]:text-primary"
+          dangerouslySetInnerHTML={{
+            __html: post.content_html || `<p>${post.excerpt}</p>`,
+          }}
+        />
+      </BlogArticleLayout>
     </>
   );
 }

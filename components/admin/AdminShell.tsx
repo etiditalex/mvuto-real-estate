@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import AdminSidebar from "./AdminSidebar";
 import AdminTopBar from "./AdminTopBar";
 import { useAdminShell } from "./AdminShellContext";
@@ -26,6 +26,7 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
   }, [pathname, setMobileOpen]);
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) return;
     const supabase = createClient();
 
     async function load() {

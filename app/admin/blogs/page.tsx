@@ -12,6 +12,7 @@ import { formatIsoDate } from "@/lib/admin/utils";
 import { adminPath } from "@/lib/admin/path";
 import { useWebsiteImport } from "@/lib/admin/useWebsiteImport";
 import { propertyImageProps } from "@/lib/images";
+import { isMarketResearchPost } from "@/lib/market-research/catalog";
 
 export default function AdminBlogsPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -23,7 +24,7 @@ export default function AdminBlogsPage() {
       .from("blog_posts")
       .select("*")
       .order("published_at", { ascending: false });
-    setPosts((data as BlogPost[]) || []);
+    setPosts(((data as BlogPost[]) || []).filter((post) => !isMarketResearchPost(post.category)));
     setLoading(false);
   };
 
