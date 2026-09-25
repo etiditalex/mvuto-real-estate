@@ -109,7 +109,7 @@ export default function HomeTestimonials() {
       setName("");
       setEmail("");
       setMessage("");
-      setFormNote("Thank you. Your review is now in the testimonials above.");
+      setFormNote("Thank you. Your review is now in the testimonials.");
     } catch {
       setFormError("Could not send your review. Please try again.");
     } finally {
@@ -134,65 +134,68 @@ export default function HomeTestimonials() {
             All testimonials <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        {items.length > 0 ? (
-          <div className="mx-auto max-w-4xl">
-            <article className="bg-[#f3f3f3] px-6 py-8 sm:px-10 sm:py-10">
-              <div className="flex items-center gap-3">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
-                  <User size={26} strokeWidth={2.25} />
-                </span>
-                <h3 className="text-lg font-bold text-primary sm:text-xl">
-                  {items[activeIndex % items.length]?.name}
-                </h3>
-              </div>
-              <p className="mt-5 text-base leading-relaxed text-neutral-900 sm:text-[17px]">
-                {items[activeIndex % items.length]?.text}
-              </p>
-            </article>
-            {items.length > 1 ? (
-              <div className="mt-5 flex items-center justify-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setActiveIndex((index) => (index - 1 + items.length) % items.length)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
-                  aria-label="Previous testimonial"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <div className="flex items-center gap-2" role="tablist" aria-label="Testimonials">
-                  {items.map((item, index) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={index === activeIndex}
-                      aria-label={`Show review from ${item.name}`}
-                      onClick={() => setActiveIndex(index)}
-                      className={`h-2.5 rounded-full transition ${
-                        index === activeIndex ? "w-6 bg-primary" : "w-2.5 bg-primary/25"
-                      }`}
-                    />
-                  ))}
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-12">
+          {items.length > 0 ? (
+            <div>
+              <article className="bg-[#f3f3f3] px-6 py-8 sm:px-10 sm:py-10">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+                    <User size={26} strokeWidth={2.25} />
+                  </span>
+                  <h3 className="text-lg font-bold text-primary sm:text-xl">
+                    {items[activeIndex % items.length]?.name}
+                  </h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveIndex((index) => (index + 1) % items.length)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
-                  aria-label="Next testimonial"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
+                <p className="mt-5 text-base leading-relaxed text-neutral-900 sm:text-[17px]">
+                  {items[activeIndex % items.length]?.text}
+                </p>
+              </article>
+              {items.length > 1 ? (
+                <div className="mt-5 flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndex((index) => (index - 1 + items.length) % items.length)}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
+                    aria-label="Previous testimonial"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <div className="flex items-center gap-2" role="tablist" aria-label="Testimonials">
+                    {items.map((item, index) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={index === activeIndex}
+                        aria-label={`Show review from ${item.name}`}
+                        onClick={() => setActiveIndex(index)}
+                        className={`h-2.5 rounded-full transition ${
+                          index === activeIndex ? "w-6 bg-primary" : "w-2.5 bg-primary/25"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndex((index) => (index + 1) % items.length)}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
+                    aria-label="Next testimonial"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="hidden lg:block" />
+          )}
 
-        <form onSubmit={submitReview} className="mx-auto mt-14 max-w-3xl">
+          <form onSubmit={submitReview}>
           <p className="text-base font-semibold leading-relaxed text-primary sm:text-lg">
             Please fill in the form below to share your experience with MVUTO. Thank you for your
             great, unwavering support
           </p>
-          <div className="mt-8 grid gap-8 sm:grid-cols-2">
+          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             <label className="block text-sm font-medium uppercase tracking-wide text-primary">
               Name *
               <input
@@ -232,7 +235,8 @@ export default function HomeTestimonials() {
           >
             {submitting ? "Sending" : "Send"}
           </button>
-        </form>
+          </form>
+        </div>
       </div>
     </section>
   );
