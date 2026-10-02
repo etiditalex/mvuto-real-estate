@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Phone, ChevronDown, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { COMPANY_PHONE_DISPLAY, COMPANY_PHONE_E164 } from "@/lib/site";
 
 const LOGO_URL =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771659167/mvuto_real_estate_logo_a5evt8.jpg";
@@ -148,11 +149,11 @@ export default function Header() {
         {/* Contact + CTA */}
         <div className="hidden items-center gap-5 xl:flex">
           <a
-            href="tel:+254798359389"
+            href={`tel:${COMPANY_PHONE_E164}`}
             className="flex items-center gap-2 text-white/90 transition-colors hover:text-accent"
           >
             <Phone className="h-5 w-5 text-accent" />
-            <span>0798 359389</span>
+            <span>{COMPANY_PHONE_DISPLAY}</span>
           </a>
           <Link
             href="/contact"
@@ -209,11 +210,11 @@ export default function Header() {
                 </div>
               ))}
               <a
-                href="tel:+254798359389"
+                href={`tel:${COMPANY_PHONE_E164}`}
                 className="flex items-center gap-2 rounded-lg px-4 py-3 text-white/90"
               >
                 <Phone className="h-5 w-5 text-accent" />
-                0798 359389
+                {COMPANY_PHONE_DISPLAY}
               </a>
               <Link
                 href="/contact"

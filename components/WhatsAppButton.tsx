@@ -1,6 +1,8 @@
 "use client";
 
-const WHATSAPP_NUMBER = "254798359389";
+import { COMPANY_WHATSAPP } from "@/lib/site";
+
+const WHATSAPP_NUMBER = COMPANY_WHATSAPP;
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function WhatsAppButton() {

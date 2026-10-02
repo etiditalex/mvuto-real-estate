@@ -11,9 +11,11 @@ export const COMPANY_NAME = "MVUTO Real Estate Ltd";
 
 export const COMPANY_EMAIL = "info@mvuto.co.ke";
 
-export const COMPANY_PHONE_DISPLAY = "+254 798 359 389";
+export const COMPANY_PHONE_DISPLAY = "0116822222";
 
-export const COMPANY_PHONE_E164 = "+254798359389";
+export const COMPANY_PHONE_E164 = "+254116822222";
+
+export const COMPANY_WHATSAPP = "254116822222";
 
 export const COMPANY_LOCATION = "Coast Region, Kenya";
 

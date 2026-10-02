@@ -123,7 +123,7 @@ export const HOME_FAQS: FaqItem[] = [
   {
     question: "How do I start buying land with MVUTO?",
     answer:
-      "Browse plots on the For Sale page, open a project for price and payment details, then enquire via the contact form, phone +254 798 359 389, or WhatsApp. The team can arrange a site visit and walk you through documentation.",
+      "Browse plots on the For Sale page, open a project for price and payment details, then enquire via the contact form, phone 0116822222, or WhatsApp. The team can arrange a site visit and walk you through documentation.",
   },
 ];
 
@@ -162,7 +162,7 @@ export const CONTACT_FAQS: FaqItem[] = [
   {
     question: "How can I contact MVUTO Real Estate?",
     answer:
-      "Call +254 798 359 389, email info@mvuto.co.ke, use the website contact form, or chat on WhatsApp. The team is based on Kenya's Coast and handles enquiries about plots, site visits and payment plans.",
+      "Call 0116822222, email info@mvuto.co.ke, use the website contact form, or chat on WhatsApp. The team is based on Kenya's Coast and handles enquiries about plots, site visits and payment plans.",
   },
   {
     question: "Can I book a site visit?",

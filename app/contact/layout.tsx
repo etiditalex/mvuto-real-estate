@@ -5,7 +5,7 @@ import { COMPANY_EMAIL, COMPANY_PHONE_E164, SITE_URL } from "@/lib/site";
 
 const title = "Contact MVUTO Real Estate";
 const description =
-  "Contact MVUTO Real Estate to buy land on Kenya's Coast. Call +254 798 359 389, email info@mvuto.co.ke, or book a site visit for Kilifi, Diani and Mariakani plots.";
+  "Contact MVUTO Real Estate to buy land on Kenya's Coast. Call 0116822222, email info@mvuto.co.ke, or book a site visit for Kilifi, Diani and Mariakani plots.";
 
 export const metadata: Metadata = buildMetadata({
   title,

@@ -20,7 +20,7 @@ import {
 import PropertyCard from "@/components/PropertyCard";
 import HomeTestimonials from "@/components/HomeTestimonials";
 import type { CatalogProperty } from "@/lib/properties/catalog";
-import { COMPANY_PHONE_E164 } from "@/lib/site";
+import { COMPANY_PHONE_E164, COMPANY_WHATSAPP } from "@/lib/site";
 
 const COASTAL_AREAS = ["Chumani", "Mariakani", "Kaloleni", "Diani", "Bofa", "Kibao Kiche"] as const;
 
@@ -111,7 +111,7 @@ function CoastalPlotFinder() {
               Talk to an Expert
             </a>
             <a
-              href={`https://wa.me/254798359389?text=${encodeURIComponent("Hello MVUTO Real Estate, I would like help choosing a coastal plot.")}`}
+              href={`https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent("Hello MVUTO Real Estate, I would like help choosing a coastal plot.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-semibold text-white transition hover:bg-[#1ebe5d]"

@@ -13,6 +13,7 @@ import {
   Twitter,
   Video,
 } from "lucide-react";
+import { COMPANY_PHONE_DISPLAY, COMPANY_PHONE_E164 } from "@/lib/site";
 
 const LOGO_URL =
   "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771659167/mvuto_real_estate_logo_a5evt8.jpg";
@@ -123,11 +124,11 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="tel:+254798359389"
+                  href={`tel:${COMPANY_PHONE_E164}`}
                   className="flex items-start gap-3 text-sm text-white/90 transition-colors hover:text-accent"
                 >
                   <Phone className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                  <span>+254 798 359 389</span>
+                  <span>{COMPANY_PHONE_DISPLAY}</span>
                 </a>
               </li>
               <li>
