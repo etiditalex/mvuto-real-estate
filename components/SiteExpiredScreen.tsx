@@ -25,7 +25,7 @@ function CircuitCorner({ className, flip = false }: { className: string; flip?: 
 
 function RenewMark() {
   return (
-    <svg viewBox="0 0 360 292" className="h-auto w-full max-w-[300px]" aria-hidden="true">
+    <svg viewBox="-22 0 370 292" className="h-auto w-full max-w-[320px]" aria-hidden="true">
       <rect x="58" y="78" width="210" height="148" rx="34" fill="#fff" />
       <text
         x="163"
@@ -90,7 +90,7 @@ export default function SiteExpiredScreen({ compact = false }: { compact?: boole
           <span className="mt-1 block text-6xl text-white sm:text-7xl">Renew</span>
         </h1>
 
-        <div className="-mt-1 w-full">
+        <div className="-mt-1 flex w-full justify-center">
           <RenewMark />
         </div>
 
