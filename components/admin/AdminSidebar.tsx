@@ -16,6 +16,7 @@ import {
   Megaphone,
   BarChart3,
   Quote,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/admin/utils";
 import { adminPath } from "@/lib/admin/path";
@@ -33,6 +34,7 @@ const navItems = [
   { segment: "testimonials", label: "Testimonials", icon: Quote },
   { segment: "inquiries", label: "Inquiries", icon: MessageSquare, badge: "inquiries" as const },
   { segment: "leads", label: "Leads", icon: Users, badge: "leads" as const },
+  { segment: "settings", label: "Settings", icon: Settings },
 ];
 
 type AdminSidebarProps = {

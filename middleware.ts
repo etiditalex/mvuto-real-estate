@@ -11,6 +11,7 @@ import {
   toInternalAdminPath,
   usesSecretAdminPath,
 } from "@/lib/admin/path";
+import { fetchSiteAvailability } from "@/lib/site/fetchSiteAvailability";
 
 function withNoIndex(response: NextResponse): NextResponse {
   response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
@@ -69,6 +70,24 @@ export async function middleware(request: NextRequest) {
     }
 
     return withNoIndex(response);
+  }
+
+  if (!pathname.startsWith("/api") && pathname !== "/site-unavailable") {
+    const { publicDisabled, mode } = await fetchSiteAvailability();
+    if (publicDisabled) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/site-unavailable";
+      url.search = "";
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-mvuto-site-expired", "1");
+      requestHeaders.set("x-mvuto-offline-mode", mode);
+      const rewritten = NextResponse.rewrite(url, {
+        request: { headers: requestHeaders },
+      });
+      rewritten.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+      rewritten.headers.set("Cache-Control", "private, no-store");
+      return rewritten;
+    }
   }
 
   return NextResponse.next();

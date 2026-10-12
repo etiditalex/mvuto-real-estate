@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MapPin, MessageSquare, Users, ArrowRight, Building2, TrendingUp } from "lucide-react";
+import { MapPin, MessageSquare, Users, ArrowRight, Building2, TrendingUp, Settings } from "lucide-react";
 import AdminShell from "@/components/admin/AdminShell";
 import StatCard from "@/components/admin/StatCard";
 import { createClient } from "@/lib/supabase/client";
@@ -63,6 +63,7 @@ export default function AdminDashboardPage() {
     { href: adminPath("properties/new"), label: "Add Property", icon: MapPin },
     { href: adminPath("inquiries"), label: "View Inquiries", icon: MessageSquare },
     { href: adminPath("leads"), label: "Manage Leads", icon: Users },
+    { href: adminPath("settings"), label: "Settings", icon: Settings },
   ];
 
   return (
@@ -98,7 +99,7 @@ export default function AdminDashboardPage() {
             />
           </div>
 
-          <div className="mb-8 grid gap-3 sm:grid-cols-3">
+          <div className="mb-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {quickActions.map((action, i) => {
               const Icon = action.icon;
               return (

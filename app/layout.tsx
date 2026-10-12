@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import { COMPANY_NAME, DEFAULT_OG_IMAGE, LOGO_URL, SITE_URL } from "@/lib/site";
+import { EXPIRED_BANNER, EXPIRED_HEADING } from "@/lib/site/availability";
+import { fetchSiteAvailability } from "@/lib/site/fetchSiteAvailability";
 
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -17,7 +20,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export const metadata: Metadata = {
+const siteMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: "Land for Sale Kenya Coast | Kilifi, Diani & Mariakani Plots | MVUTO",
@@ -85,11 +88,43 @@ export const metadata: Metadata = {
   ...(GSC_VERIFICATION ? { verification: { google: GSC_VERIFICATION } } : {}),
 };
 
-export default function RootLayout({
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const headerStore = await headers();
+  if (headerStore.get("x-mvuto-site-expired") !== "1") return siteMetadata;
+
+  if (headerStore.get("x-mvuto-offline-mode") === "not-found") {
+    return {
+      ...siteMetadata,
+      title: { absolute: "Page not found" },
+      description: "This page could not be found.",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return {
+    ...siteMetadata,
+    title: { absolute: EXPIRED_HEADING },
+    description: EXPIRED_BANNER,
+    robots: { index: false, follow: false },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { publicDisabled } = await fetchSiteAvailability();
+  const headerStore = await headers();
+  const offlineMode =
+    headerStore.get("x-mvuto-site-expired") === "1"
+      ? headerStore.get("x-mvuto-offline-mode") === "not-found"
+        ? "not-found"
+        : "expired"
+      : "online";
+
   return (
     <html lang="en-KE">
       <head>
@@ -105,14 +140,14 @@ gtag('config', 'G-CMG2JFNFP7');`,
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        {!publicDisabled && <JsonLd data={[organizationSchema(), websiteSchema()]} />}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-primary"
         >
           Skip to content
         </a>
-        <ConditionalLayout>{children}</ConditionalLayout>
+        <ConditionalLayout offlineMode={offlineMode}>{children}</ConditionalLayout>
       </body>
     </html>
   );

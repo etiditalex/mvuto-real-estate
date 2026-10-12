@@ -3,8 +3,14 @@ import { fetchPublishedProperties } from "@/lib/properties/getProperties";
 import { propertyPublicPath } from "@/lib/properties/catalog";
 import { fetchPublishedBlogs, fetchPublishedMarketResearch } from "@/lib/blog/getBlogs";
 import { SITE_URL } from "@/lib/site";
+import { fetchSiteAvailability } from "@/lib/site/fetchSiteAvailability";
+
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { publicDisabled } = await fetchSiteAvailability();
+  if (publicDisabled) return [];
+
   const [properties, blogs, research] = await Promise.all([
     fetchPublishedProperties(),
     fetchPublishedBlogs(),

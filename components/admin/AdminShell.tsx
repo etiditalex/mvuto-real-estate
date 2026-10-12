@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import AdminSidebar from "./AdminSidebar";
 import AdminTopBar from "./AdminTopBar";
 import { useAdminShell } from "./AdminShellContext";
 import { cn } from "@/lib/admin/utils";
+import { adminPath } from "@/lib/admin/path";
+import { parseSiteAvailability, SITE_AVAILABILITY_KEY } from "@/lib/site/availability";
 import type { Profile } from "@/lib/supabase/types";
 
 type AdminShellProps = {
@@ -20,6 +23,7 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
   const { collapsed, mobileOpen, setMobileOpen } = useAdminShell();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [badges, setBadges] = useState({ inquiries: 0, leads: 0 });
+  const [offlineMode, setOfflineMode] = useState<"online" | "expired" | "not-found">("online");
 
   useEffect(() => {
     setMobileOpen(false);
@@ -43,6 +47,13 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
         supabase.from("property_leads").select("*", { count: "exact", head: true }).eq("status", "new"),
       ]);
       setBadges({ inquiries: inq || 0, leads: leads || 0 });
+
+      const { data: setting } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", SITE_AVAILABILITY_KEY)
+        .maybeSingle();
+      setOfflineMode(parseSiteAvailability(setting?.value).mode);
     }
 
     load();
@@ -75,6 +86,16 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
           collapsed ? "lg:ml-[72px]" : "lg:ml-64"
         )}
       >
+        {offlineMode !== "online" ? (
+          <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            {offlineMode === "not-found"
+              ? "The public website is offline. Visitors see a 404 error."
+              : "The public website is offline. Visitors only see the renewal notice."}{" "}
+            <Link href={adminPath("settings")} className="font-semibold underline">
+              Open Settings
+            </Link>
+          </div>
+        ) : null}
         {children}
       </main>
     </div>
