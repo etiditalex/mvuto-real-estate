@@ -11,7 +11,13 @@ ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Admin full access settings" ON site_settings;
 CREATE POLICY "Admin full access settings" ON site_settings
-  FOR ALL USING (auth.role() = 'authenticated');
+  FOR ALL
+  USING (auth.role() = 'authenticated' AND key <> 'admin_device')
+  WITH CHECK (auth.role() = 'authenticated' AND key <> 'admin_device');
+
+-- admin_device is written only by the server. It is not publicly readable.
+-- If this browser loses its cookie, allow every device again with:
+-- UPDATE site_settings SET value = '{"enabled": false}'::jsonb WHERE key = 'admin_device';
 
 DROP POLICY IF EXISTS "Public read site availability" ON site_settings;
 CREATE POLICY "Public read site availability" ON site_settings

@@ -38,6 +38,8 @@ export default function AdminSettingsPage() {
   const [savedMode, setSavedMode] = useState<SiteOfflineMode>("online");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deviceOnly, setDeviceOnly] = useState(false);
+  const [savedDeviceOnly, setSavedDeviceOnly] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -67,26 +69,49 @@ export default function AdminSettingsPage() {
       const nextMode = parseSiteAvailability(data?.value).mode;
       setMode(nextMode);
       setSavedMode(nextMode);
+
+      const deviceResponse = await fetch("/api/admin/device", { cache: "no-store" });
+      if (deviceResponse.ok) {
+        const device = (await deviceResponse.json()) as { enabled?: boolean };
+        const enabled = device.enabled === true;
+        setDeviceOnly(enabled);
+        setSavedDeviceOnly(enabled);
+      }
+
       setLoading(false);
     }
 
     load();
   }, []);
 
-  const dirty = mode !== savedMode;
+  const dirty = mode !== savedMode || deviceOnly !== savedDeviceOnly;
+
+  const deviceNote = !deviceOnly
+    ? "Any device that can sign in can open the dashboard."
+    : mode === "expired"
+      ? "Other devices that open the dashboard see the renewal notice."
+      : "Other devices that open the dashboard see a 404 error.";
 
   const handleSave = async () => {
     setMessage("");
     setError("");
 
-    if (mode !== "online" && mode !== savedMode) {
-      const confirmed = window.confirm(
+    const prompts: string[] = [];
+    if (mode !== savedMode && mode !== "online") {
+      prompts.push(
         mode === "not-found"
           ? "Switch off the public website? Visitors will see a 404 error on every public page until you turn it back on."
           : "Disable the public website? Visitors will only see the renewal notice until you turn it back on."
       );
-      if (!confirmed) return;
     }
+    if (deviceOnly !== savedDeviceOnly) {
+      prompts.push(
+        deviceOnly
+          ? "Lock the admin dashboard to this browser? Every other device will see the renewal notice or a 404 instead of the dashboard."
+          : "Allow every device to open the admin dashboard again?"
+      );
+    }
+    if (prompts.length > 0 && !window.confirm(prompts.join("\n\n"))) return;
 
     if (!isSupabaseConfigured()) {
       setError("Supabase is not configured, so this switch cannot be saved yet.");
@@ -94,32 +119,61 @@ export default function AdminSettingsPage() {
     }
 
     setSaving(true);
-    const supabase = createClient();
-    const { error: saveError } = await supabase.from("site_settings").upsert(
-      {
-        key: SITE_AVAILABILITY_KEY,
-        value: { publicDisabled: mode !== "online", mode },
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "key" }
-    );
-    setSaving(false);
-
-    if (saveError) {
-      setError(
-        "Could not save. Run supabase/site-availability.sql in the Supabase SQL editor, then try again."
+    if (mode !== savedMode) {
+      const supabase = createClient();
+      const { error: saveError } = await supabase.from("site_settings").upsert(
+        {
+          key: SITE_AVAILABILITY_KEY,
+          value: { publicDisabled: mode !== "online", mode },
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "key" }
       );
-      return;
+      if (saveError) {
+        setSaving(false);
+        setError(
+          "Could not save. Run supabase/site-availability.sql in the Supabase SQL editor, then try again."
+        );
+        return;
+      }
+      setSavedMode(mode);
     }
 
-    setSavedMode(mode);
-    setMessage(
-      mode === "not-found"
-        ? "The public website is now offline. Visitors see a 404 error."
-        : mode === "expired"
-          ? "The public website is now offline. Visitors see the renewal notice."
-          : "The public website is back online."
-    );
+    if (deviceOnly !== savedDeviceOnly) {
+      const deviceResponse = await fetch("/api/admin/device", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled: deviceOnly }),
+      });
+      if (!deviceResponse.ok) {
+        setSaving(false);
+        setError(
+          "Could not update dashboard access. Run supabase/site-availability.sql in the Supabase SQL editor, then try again."
+        );
+        return;
+      }
+      setSavedDeviceOnly(deviceOnly);
+    }
+    setSaving(false);
+
+    const parts: string[] = [];
+    if (mode !== savedMode) {
+      parts.push(
+        mode === "not-found"
+          ? "The public website is now offline. Visitors see a 404 error."
+          : mode === "expired"
+            ? "The public website is now offline. Visitors see the renewal notice."
+            : "The public website is back online."
+      );
+    }
+    if (deviceOnly !== savedDeviceOnly) {
+      parts.push(
+        deviceOnly
+          ? "The dashboard is now limited to this browser."
+          : "The dashboard can be opened from any device again."
+      );
+    }
+    setMessage(parts.join(" "));
   };
 
   const statusLabel = savedMode === "not-found" ? "404" : savedMode === "expired" ? "Renewal notice" : "Online";
@@ -177,6 +231,41 @@ export default function AdminSettingsPage() {
                   </button>
                 );
               })}
+            </div>
+
+            <div className="mt-5 border-t border-primary/10 pt-5">
+              <h3 className="mb-3 text-sm font-bold text-primary">Admin dashboard</h3>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={deviceOnly}
+                onClick={() => setDeviceOnly((current) => !current)}
+                className={cn(
+                  "flex w-full items-start gap-3 rounded-xl border p-4 text-left transition",
+                  deviceOnly
+                    ? "border-accent bg-accent-blend/40"
+                    : "border-primary/15 bg-primary/5 hover:bg-primary/[0.07]"
+                )}
+              >
+                <span
+                  className={cn(
+                    "relative mt-0.5 h-6 w-11 shrink-0 rounded-full transition",
+                    deviceOnly ? "bg-primary" : "bg-primary/25"
+                  )}
+                  aria-hidden
+                >
+                  <span
+                    className={cn(
+                      "absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition",
+                      deviceOnly && "translate-x-5"
+                    )}
+                  />
+                </span>
+                <span>
+                  <span className="block text-sm font-medium text-primary">Only this device</span>
+                  <span className="mt-0.5 block text-xs text-primary/60">{deviceNote}</span>
+                </span>
+              </button>
             </div>
 
             {message && (

@@ -224,7 +224,9 @@ CREATE POLICY "Admin full access leads" ON property_leads
 
 DROP POLICY IF EXISTS "Admin full access settings" ON site_settings;
 CREATE POLICY "Admin full access settings" ON site_settings
-  FOR ALL USING (auth.role() = 'authenticated');
+  FOR ALL
+  USING (auth.role() = 'authenticated' AND key <> 'admin_device')
+  WITH CHECK (auth.role() = 'authenticated' AND key <> 'admin_device');
 
 DROP POLICY IF EXISTS "Public read site availability" ON site_settings;
 CREATE POLICY "Public read site availability" ON site_settings

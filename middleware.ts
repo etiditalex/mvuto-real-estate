@@ -11,15 +11,56 @@ import {
   toInternalAdminPath,
   usesSecretAdminPath,
 } from "@/lib/admin/path";
+import { ADMIN_DEVICE_COOKIE, adminDeviceTokensMatch, hashAdminDeviceToken } from "@/lib/site/adminDevice";
+import { fetchAdminDevice } from "@/lib/site/fetchAdminDevice";
 import { fetchSiteAvailability } from "@/lib/site/fetchSiteAvailability";
+import type { SiteOfflineMode } from "@/lib/site/availability";
 
 function withNoIndex(response: NextResponse): NextResponse {
   response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   return response;
 }
 
+function rewriteOffline(request: NextRequest, mode: Exclude<SiteOfflineMode, "online">) {
+  const url = request.nextUrl.clone();
+  url.pathname = "/site-unavailable";
+  url.search = "";
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-mvuto-site-expired", "1");
+  requestHeaders.set("x-mvuto-offline-mode", mode);
+  const rewritten = NextResponse.rewrite(url, {
+    request: { headers: requestHeaders },
+  });
+  rewritten.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  rewritten.headers.set("Cache-Control", "private, no-store");
+  return rewritten;
+}
+
+async function adminDeviceAllows(request: NextRequest): Promise<boolean> {
+  const lock = await fetchAdminDevice();
+  if (!lock.enabled) return true;
+  const token = request.cookies.get(ADMIN_DEVICE_COOKIE)?.value ?? "";
+  if (!token) return false;
+  return adminDeviceTokensMatch(await hashAdminDeviceToken(token), lock.tokenHash);
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  const dashboardRequest =
+    isAdminPath(pathname) ||
+    pathname.startsWith("/api/admin") ||
+    pathname === `${ADMIN_LOGIN_PATH}/` ||
+    pathname === "/admin/login";
+
+  if (dashboardRequest && !(await adminDeviceAllows(request))) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    const availability = await fetchSiteAvailability();
+    const mode = availability.mode === "expired" ? "expired" : "not-found";
+    return rewriteOffline(request, mode);
+  }
 
   if (pathname === `${ADMIN_LOGIN_PATH}/` || pathname === "/admin/login") {
     const url = request.nextUrl.clone();
@@ -75,18 +116,7 @@ export async function middleware(request: NextRequest) {
   if (!pathname.startsWith("/api") && pathname !== "/site-unavailable") {
     const { publicDisabled, mode } = await fetchSiteAvailability();
     if (publicDisabled) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/site-unavailable";
-      url.search = "";
-      const requestHeaders = new Headers(request.headers);
-      requestHeaders.set("x-mvuto-site-expired", "1");
-      requestHeaders.set("x-mvuto-offline-mode", mode);
-      const rewritten = NextResponse.rewrite(url, {
-        request: { headers: requestHeaders },
-      });
-      rewritten.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
-      rewritten.headers.set("Cache-Control", "private, no-store");
-      return rewritten;
+      return rewriteOffline(request, mode === "not-found" ? "not-found" : "expired");
     }
   }
 

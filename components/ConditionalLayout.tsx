@@ -19,7 +19,7 @@ export default function ConditionalLayout({
   const pathname = usePathname();
   const isAdmin = pathname ? isAdminPath(pathname) : false;
 
-  if (!isAdmin && offlineMode === "not-found") {
+  if (offlineMode === "not-found") {
     return (
       <main id="main-content" className="min-w-0">
         <SiteNotFoundScreen />
@@ -27,7 +27,7 @@ export default function ConditionalLayout({
     );
   }
 
-  if (!isAdmin && offlineMode === "expired") {
+  if (offlineMode === "expired") {
     return (
       <main id="main-content" className="min-w-0">
         <SiteExpiredScreen />
