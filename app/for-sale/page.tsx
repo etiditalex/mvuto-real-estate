@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import PropertyCard from "@/components/PropertyCard";
@@ -10,9 +9,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbSchema, SALE_FAQS, webPageSchema } from "@/lib/seo";
 import { STATIC_PROPERTY_CATALOG, type CatalogProperty } from "@/lib/properties/catalog";
 import { sortPropertiesNewestFirst } from "@/lib/properties/sortProperties";
-
-const HERO_IMAGE_URL =
-  "https://res.cloudinary.com/dyfnobo9r/image/upload/v1771828649/hero_photo_fpus31.jpg";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -73,34 +69,26 @@ export default function ForSalePage() {
           ]),
         ]}
       />
-      <section className="relative min-h-[240px] overflow-hidden py-12 lg:min-h-[280px] lg:py-16">
-        <div className="absolute inset-0" aria-hidden>
-          <Image
-            src={HERO_IMAGE_URL}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 bg-primary/55" />
-        <div className="relative z-10 flex min-h-[240px] items-center lg:min-h-[280px]">
-          <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="break-words text-2xl font-bold text-white sm:text-3xl lg:text-4xl"
-            >
-              Properties For Sale
-            </motion.h1>
-          </div>
+      <section className="bg-primary py-10 lg:py-14">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl font-bold text-white lg:text-4xl"
+          >
+            Properties For Sale
+          </motion.h1>
         </div>
       </section>
 
-      <div className="border-b border-primary/10 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
-          <div className="relative max-w-xl">
+      <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-10">
+          <p className="max-w-4xl text-base leading-relaxed text-primary/80">
+            Browse titled land and plots for sale on Kenya&apos;s Coast. Chumani, Diani, Mariakani,
+            Bofa and more — prices, deposits and flexible payment plans from MVUTO.
+          </p>
+          <h2 className="mt-8 text-2xl font-bold text-accent">Available plots</h2>
+          <div id="property-search" className="relative mt-5 max-w-xl scroll-mt-32">
             <Search
               className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary/50"
               aria-hidden
@@ -110,14 +98,14 @@ export default function ForSalePage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by property name or location..."
-              className="w-full rounded-lg border border-primary/20 bg-white py-3 pl-12 pr-4 text-primary placeholder:text-primary/50 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full rounded-full border border-primary/15 bg-white py-3 pl-12 pr-4 text-primary shadow-sm placeholder:text-primary/50 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
               aria-label="Search properties"
             />
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 pb-16 lg:px-8 lg:pb-24">
         {filteredProperties.length === 0 ? (
           <p className="rounded-xl border border-primary/10 bg-primary/5 px-6 py-10 text-center text-primary/80">
             No properties match &quot;{query}&quot;. Try a different name or location.
